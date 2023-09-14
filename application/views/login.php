@@ -30,13 +30,18 @@
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
-                    <form action="<?= base_url('Auth/login') ?>" method="post" >
+
+                    <div class="alert alert-primary" style=" display: <?= $sError == null ? 'none': "block" ?>; " role="alert">
+                        <?= $sError ?>
+                    </div>
+
+                    <form action="<?= base_url('Auth/login') ?>" method="post">
                         <h1>เข้าสู่ระบบ</h1>
                         <div>
-                            <input type="text" class="form-control" placeholder="Username" required="" />
+                            <input type="text" class="form-control" placeholder="Username" name="ACC_USERNAME" required="" />
                         </div>
                         <div>
-                            <input type="password" class="form-control" placeholder="Password" required="" />
+                            <input type="password" class="form-control" placeholder="Password" name="ACC_PASSWORD" required="" />
                         </div>
                         <div class="justify-content-center">
                             <button type="submit" class="btn btn-md btn-success ">Log in</button>

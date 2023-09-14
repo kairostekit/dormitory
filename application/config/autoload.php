@@ -90,7 +90,7 @@ $autoload['drivers'] = array('session', 'cache');
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file','form','Cookie','CAPTCHA','Array','Date','Directory','Download','Email','HTML','Inflector','Number','Path','Security','Smiley','Text','Typography','XML');
+$autoload['helper'] = array('fn','url', 'file','form','Cookie','CAPTCHA','Array','Date','Directory','Download','Email','HTML','Inflector','Number','Path','Security','Smiley','Text','Typography','XML');
 
 
 /*
@@ -134,5 +134,5 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('CD_models');
+$autoload['model'] = array('CD_models','account_models','issue_receipt_models','issue_receipt_details_models','make_contract_models','room_models','room_type_models','users_info_models',);
 
