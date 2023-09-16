@@ -34,31 +34,37 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ชื่อประเภทห้อง<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" data-validate-length-range="6" data-validate-words="2" name="RT_NAME" required="required">
+                                    <input class="form-control" data-validate-minmax="1,99999999" name="RT_NAME" required="required">
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ค่าเช่ารายเดือน<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" name="RT_ROOMRENT" data-validate-length-range="1,15" type="number">
+                                    <input class="form-control" name="RT_ROOMRENT" data-validate-minmax="1,99999999" type="number">
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ค่าทำสัญญาจอง<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" name="RT_RESERVE" required="required" type="number">
+                                    <input class="form-control" name="RT_RESERVE" data-validate-minmax="1,99999999" required="required" type="number">
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ทำสัญญาย้ายเข้า<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" type="number" name="RT_MOVEIN" data-validate-linked="number" required="required">
+                                    <input class="form-control" type="number" name="RT_MOVEIN" data-validate-minmax="1,99999999"  data-validate-linked="number" required="required">
+                                </div>
+                            </div>
+                            <div class="field item form-group">
+                                <label class="col-form-label col-md-3 col-sm-3  label-align">เงินประกันทั้งหมด<span class="required">*</span></label>
+                                <div class="col-md-6 col-sm-6">
+                                    <input class="form-control" type="number" name="RT_DEPOSIT" data-validate-minmax="1,99999999" data-validate-linked="number" required="required">
                                 </div>
                             </div>
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ค่าน้ำ<span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" type="number" name="RT_WATER" data-validate-minmax="1,100" data-validate-linked="number" required="required">
+                                    <input class="form-control" type="number" name="RT_WATER" data-validate-minmax="1,99999999" data-validate-linked="number" required="required">
                                 </div>
                             </div>
 
@@ -66,7 +72,7 @@
                             <div class="field item form-group">
                                 <label class="col-form-label col-md-3 col-sm-3  label-align">ค่าไฟ <span class="required">*</span></label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" type="number" name="RT_ELECTRICCTY" data-validate-minmax="1,100" required="required">
+                                    <input class="form-control" type="number" name="RT_ELECTRICCTY" data-validate-minmax="1,99999999" required="required">
                                 </div>
                             </div>
                             <div class="field item form-group">
@@ -76,14 +82,14 @@
                                 </div>
                             </div>
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดขนาดห้อง<span class="required">*</span></label>
+                                <label class="col-form-label col-md-3 col-sm-3  label-align">รายละเอียดขนาดห้อง</label>
                                 <div class="col-md-6 col-sm-6">
-                                    <input class="form-control" type="text" name="RT_ROOMSIZE_D" required="required">
+                                    <input class="form-control" type="text" name="RT_ROOMSIZE_D" >
                                 </div>
                             </div>
 
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3  label-align">เงือนไขการขอคืนเงิน<span class="required">*</span></label>
+                                <label class="col-form-label col-md-3 col-sm-3  label-align">เงือนไขการขอคืนเงิน</label>
                                 <div class="col-md-6 col-sm-6">
                                     <textarea name="RT_CONDITIONS" class="form-control" id="" cols="30" rows="5"></textarea>
 
@@ -91,7 +97,7 @@
                             </div>
 
                             <div class="field item form-group">
-                                <label class="col-form-label col-md-3 col-sm-3  label-align">รายเอียด<span class="required">*</span></label>
+                                <label class="col-form-label col-md-3 col-sm-3  label-align">รายเอียด</label>
                                 <div class="col-md-6 col-sm-6">
                                     <textarea name="RT_DETAILS" class="form-control" id="" cols="30" rows="5"></textarea>
 

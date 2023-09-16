@@ -132,7 +132,7 @@ CREATE TABLE `room_type` (
   `RT_NAME` varchar(50) NOT NULL,
   `RT_STATUS` varchar(5) DEFAULT NULL,
   `RT_STAMP` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `TR_DEPOSIT` decimal(10,2) DEFAULT NULL COMMENT 'เงินประกัน',
+  `RT_DEPOSIT` decimal(10,2) DEFAULT NULL COMMENT 'เงินประกัน',
   `RT_RESERVE` decimal(10,2) DEFAULT NULL COMMENT 'ทำสัญญาจอง',
   `RT_MOVEIN` decimal(10,2) DEFAULT NULL COMMENT 'ทำสัญญาย้ายเข้า',
   `RT_WATER` decimal(10,2) DEFAULT 10.00 COMMENT 'ค่าน้ำ  0-10 เหมาจ่าย ต่อไป 10/unit',

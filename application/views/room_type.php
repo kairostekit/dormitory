@@ -54,14 +54,14 @@
                                     <td><?= $ii->RT_ROOMRENT ?> </td>
                                     <td><?= $ii->RT_RESERVE ?> </td>
                                     <td><?= $ii->RT_MOVEIN ?> </td>
-                                    <td><?= $ii->TR_DEPOSIT ?> </td>
+                                    <td><?= $ii->RT_DEPOSIT ?> </td>
                                     <td><?= $ii->RT_WATER.'/'.$ii->RT_ELECTRICCTY ?> </td>
                                     <td><?= $ii->RT_ROOMSIZE ?> </td>
                                     <td><?= $ii->RT_ROOMSIZE_D ?> </td>
                                     <td><?= $ii->RT_CONDITIONS ?> </td>
                                     <td><?= $ii->RT_DETAILS ?> </td>
 
-                                    <td><a class="btn btn-sm btn-warning" href="<?= base_url('home/room_type_view_edit/' . $ii->USER_ID) ?>">แก้ไข</a></td>
+                                    <td><a class="btn btn-sm btn-warning" href="<?= base_url('home/room_type_view_edit/' . $ii->RT_ID) ?>">แก้ไข</a></td>
                                 </tr>
                             <?php endforeach; ?>
                             </tbody>
