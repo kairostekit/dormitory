@@ -18,10 +18,121 @@ class Home extends CI_Controller
 
 	public function index()
 	{
-
-		$CD_models = new CD_models();
 		$data = array();
 		$Load = new MY_Loader();
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$Make_contract_models = new Make_contract_models();
+		$Account_models = new Account_models();
+
+		$ย้ายเข้า = $Make_contract_models->QueryResources([
+			"WHERE" => [
+				$Make_contract_models->TB_NAME() => [
+					"MCO_MOVEIN_PAY" => 1,
+				]
+			]
+
+		]);
+		$รอย้ายเข้า = $Make_contract_models->QueryResources([
+			"WHERE" => [
+				$Make_contract_models->TB_NAME() => [
+					"MCO_MOVEIN_PAY" => 0,
+				]
+			]
+
+		]);
+
+		$จำนวนบิล  = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS_CANCEL" => 0,
+				]
+			]
+
+		]);
+
+		$จำนวนบิลชำระ  = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS_CANCEL" => 0,
+					"IRC_PAYMENT_OK" => 1
+				]
+			]
+
+		]);
+
+		$จำนวนบิลค้างชำระ  = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS_CANCEL" => 0,
+					"IRC_PAYMENT_OK" => 0
+				]
+			]
+
+		]);
+
+
+		$จำนวนลูกค้า  = $Users->QueryResources([
+			"WHERE" => [
+				$Users->TB_NAME() => [
+					"USER_STATUS" => 1,
+				]
+			]
+
+		]);
+
+		$จำนวนห้อง  = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_STATUS" => 1,
+				]
+			]
+		]);
+
+		$จำนวนห้องว่าง  = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_USE" => 1,
+				]
+			]
+		]);
+
+		$จำนวนห้องไม่ว่าง  = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_USE" => 0,
+					"USER_ID !=" => null
+				]
+			]
+		]);
+
+		$จำนวนห้องถูกจอง  = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_USE" => "S",
+				]
+			]
+		]);
+
+
+		$data = [
+			"จำนวนลูกค้า" => count($จำนวนลูกค้า),
+			"จำนวนห้อง" => count($จำนวนห้อง),
+			"จำนวนห้องว่าง" => count($จำนวนห้องว่าง),
+			"จำนวนห้องไม่ว่าง" => count($จำนวนห้องไม่ว่าง),
+			"จำนวนห้องถูกจอง" => count($จำนวนห้องถูกจอง),
+			"จำนวนบิลชำระ" => count($จำนวนบิลชำระ),
+			"จำนวนบิลค้างชำระ" => count($จำนวนบิลค้างชำระ),
+			"จำนวนบิล" => count($จำนวนบิล),
+			"ย้ายเข้า" => count($ย้ายเข้า),
+			"รอย้ายเข้า" => count($รอย้ายเข้า),
+		];
+
+		// echo json_encode($data);
 		$Load->template("dashboard", $data);
 	}
 
@@ -856,12 +967,15 @@ class Home extends CI_Controller
 
 
 
-
 	public function issue_receipt()
 	{
+
 		$data = array();
 
 		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
 		$Issue_receipt_details_models = new Issue_receipt_details_models();
 		$month_tbl_models = new month_tbl_models();
 		$data['Issue_receipt_all'] = $Issue_receipt_models->QueryResources([
@@ -871,32 +985,50 @@ class Home extends CI_Controller
 				]
 			],
 			"JOIN" => [
-				$Issue_receipt_details_models->TB_NAME() => [
-					"ON" => "IRC_ID",
-					"TYPE" => "INNER"
-				],
+				// $Issue_receipt_details_models->TB_NAME() => [
+				// 	"ON" => "IRC_ID",
+				// 	"TYPE" => "INNER"
+				// ],
 				$month_tbl_models->TB_NAME() => [
 					"ON" => "MONTH_ID",
 					"TYPE" => "INNER",
 					"KEY_JOIN" => "IRC_MONTH_ID ",
+				],
+				$Room->TB_NAME() => [
+					"ON" => "RM_ID",
+					"TYPE" => "INNER",
+				],
+				$Users->TB_NAME() => [
+					"ON" => "USER_ID",
+					"TYPE" => "INNER",
+				],
+				$Room_type->TB_NAME() => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+					"JOIN" => $Room->TB_NAME()
 				]
 			],
 			"TYPE_RESULT" => "object",
 		]);
 
-		echo json_encode($data);
+		// echo json_encode($data);
 		$Load = new MY_Loader();
-		// $Load->template("room_type", $data);
+		$Load->template("issue_receipt", $data);
 	}
-	public function issue_receipt_view_add()
+	public function issue_receipt_view_add($RM_IDX = null)
 	{
-		$IRC_ID = null;
-		if (isset($_POST["IRC_ID"])) {
-			$IRC_ID = $_POST["IRC_ID"];
+		$RM_ID = null;
+		if (isset($RM_IDX)) {
+			$RM_ID = $RM_IDX;
 		}
-		if (isset($_GET["IRC_ID"])) {
-			$IRC_ID = $_GET["IRC_ID"];
+		if (isset($_POST["RM_ID"])) {
+			$RM_ID = $_POST["RM_ID"];
 		}
+		if (isset($_GET["RM_ID"])) {
+			$RM_ID = $_GET["RM_ID"];
+		}
+
+
 
 		$Issue_receipt_models = new Issue_receipt_models();
 		$Issue_receipt_details_models = new Issue_receipt_details_models();
@@ -911,7 +1043,7 @@ class Home extends CI_Controller
 
 		$data = array();
 		$data = [
-			"IRC_ID" => $IRC_ID,
+			"RM_ID" => $RM_ID,
 			"MONTH_ALL" => $MONTH
 		];
 
@@ -935,7 +1067,6 @@ class Home extends CI_Controller
 			"TYPE_RESULT" => "object",
 		]);
 
-
 		// $RES = new Users_info_models();
 		// $data['Users_info_all'] = $RES->QueryResources([
 		// 	"WHERE" => [
@@ -954,8 +1085,132 @@ class Home extends CI_Controller
 		$Load = new MY_Loader();
 		$Load->template("issue_receipt_view_add", $data);
 	}
-	public function issue_receipt_view_edit($IRC_ID)
+	public function issue_receipt_view_edit($IRC_IDX = null)
 	{
+
+		$IRC_ID = null;
+		if (isset($IRC_IDX)) {
+			$IRC_ID = $IRC_IDX;
+		}
+		if (isset($_POST["IRC_ID"])) {
+			$IRC_ID = $_POST["IRC_ID"];
+		}
+		if (isset($_GET["IRC_ID"])) {
+			$IRC_ID = $_GET["IRC_ID"];
+		}
+
+
+		$data = array();
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$data['Issue_GET'] = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS" => 1,
+					"IRC_ID" =>  $IRC_ID
+				]
+			],
+			"JOIN" => [
+				// $Issue_receipt_details_models->TB_NAME() => [
+				// 	"ON" => "IRC_ID",
+				// 	"TYPE" => "INNER"
+				// ],
+				$month_tbl_models->TB_NAME() => [
+					"ON" => "MONTH_ID",
+					"TYPE" => "INNER",
+					"KEY_JOIN" => "IRC_MONTH_ID ",
+				],
+				$Room->TB_NAME() => [
+					"ON" => "RM_ID",
+					"TYPE" => "INNER",
+				],
+				$Users->TB_NAME() => [
+					"ON" => "USER_ID",
+					"TYPE" => "INNER",
+				],
+				$Room_type->TB_NAME() => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+					"JOIN" => $Room->TB_NAME()
+				]
+			],
+			"TYPE_RESULT" => "object",
+			"ONE_ROW" => TRUE,
+		]);
+
+		$IRC_ID   = $data['Issue_GET']->IRC_ID;
+
+
+		$RES = new Room_models();
+		$data['room_all'] = $RES->QueryResources([
+			"WHERE" => [
+				"room" => [
+					"RM_STATUS" => 1,
+				]
+			],
+			"JOIN" => [
+				"room_type" => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+				]
+			],
+			"TYPE_RESULT" => "object",
+		]);
+
+
+		$month_tbl_models = new month_tbl_models();
+		$MONTH = $month_tbl_models->QueryResources([
+			"WHERE" => [
+				$month_tbl_models->TB_NAME() => [
+					"MONTH_STATUS" => 1
+				]
+			],
+		]);
+
+		$data['MONTH_ALL'] = $MONTH;
+
+
+		$data['receipt_details'] = $Issue_receipt_details_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_details_models->TB_NAME() => [
+					"IRC_ID  " =>  $IRC_ID
+				]
+			],
+			"TYPE_RESULT" => "object",
+			"ONE_ROW" => false,
+		]);
+
+		$Load = new MY_Loader();
+		$Load->template("issue_receipt_view_edit", $data);
+
+		// $data['Issue_receipt_get']->receipt_details = $data['receipt_details'];
+
+		// echo json_encode($data['room_all']);
+	}
+
+	public function issue_receipt_view_print($IRC_IDX = null)
+	{
+		$IRC_ID = null;
+		$data = array();
+		if (isset($IRC_IDX)) {
+			$IRC_ID = $IRC_IDX;
+		}
+		if (isset($_POST["IRC_ID"])) {
+			$IRC_ID = $_POST["IRC_ID"];
+		}
+		if (isset($_GET["IRC_ID"])) {
+			$IRC_ID = $_GET["IRC_ID"];
+		}
+
+
+
+		$Load = new MY_Loader();
+		$Load->view("issue_receipt_view_print", $data);
 	}
 	public function issue_receipt_insert_add()
 	{
@@ -1012,14 +1267,88 @@ class Home extends CI_Controller
 		} else {
 			echo "<script>alert('เพิ่มข้อมูลไม่สำเร็จ');history.back(-1)</script>";
 		}
+	}
+	public function issue_receipt_update_edit($IRC_IDX = null)
+	{
+	}
+	public function issue_receipt_update_delete($IRC_IDX = null)
+	{
+		$IRC_ID = null;
+		if (isset($IRC_IDX)) {
+			$IRC_ID = $IRC_IDX;
+		}
+		if (isset($_POST["IRC_ID"])) {
+			$IRC_ID = $_POST["IRC_ID"];
+		}
+		if (isset($_GET["IRC_ID"])) {
+			$IRC_ID = $_GET["IRC_ID"];
+		}
 
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+
+		$CHECK = $Issue_receipt_models->UpdateResources([
+			"WHERE" => [
+				"IRC_ID" => $IRC_ID
+			],
+			"DATA" => [
+				"IRC_STATUS_CANCEL" => "1"
+			],
+		]);
+
+		if (!$CHECK) {
+			echo "<script>alert('ยกเลิกการทำรายการชำระเงินไม่สำเร็จ');history.back(-1)</script>";
+			return;
+		}
+		$url = base_url('home/issue_receipt');
+		echo "<script>alert('ยกเลิกการทำรายการชำระเงินสำเร็จ');location.assign('$url')</script>";
 	}
-	public function issue_receipt_update_edit($IRC_ID)
+
+	public function issue_receipt_update_IRC_PAYMENT_OK($IRC_IDX = null)
 	{
+		$IRC_ID = null;
+		if (isset($IRC_IDX)) {
+			$IRC_ID = $IRC_IDX;
+		}
+		if (isset($_POST["IRC_ID"])) {
+			$IRC_ID = $_POST["IRC_ID"];
+		}
+		if (isset($_GET["IRC_ID"])) {
+			$IRC_ID = $_GET["IRC_ID"];
+		}
+
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+
+		$CHECK = $Issue_receipt_models->UpdateResources([
+			"WHERE" => [
+				"IRC_ID" => $IRC_ID
+			],
+			"DATA" => [
+				"IRC_PAYMENTFORMAT" => "2",
+				"IRC_PAYMENT_OK" => "1",
+			],
+		]);
+
+		if (!$CHECK) {
+			echo "<script>alert('ทำรายการชำระเงินไม่สำเร็จ');history.back(-1)</script>";
+			return;
+		}
+		$url = base_url('home/issue_receipt');
+		echo "<script>alert('ทำรายการชำระเงินสำเร็จ');location.assign('$url')</script>";
 	}
-	public function issue_receipt_update_delete($IRC_ID)
-	{
-	}
+
+
 
 	public function issue_receipt_getDataRom($RM_IDx)
 	{
@@ -1047,6 +1376,8 @@ class Home extends CI_Controller
 					],
 					"issue_receipt" => [
 						"IRC_YEAR" => date("Y"),
+						"IRC_STATUS_CANCEL !=" => '1'
+						// "IRC_PAYMENT_OK" => 
 					]
 				],
 				"JOIN" => [
@@ -1074,17 +1405,6 @@ class Home extends CI_Controller
 			foreach ($MONTHGroup as $key => $value) {
 				array_push($temp_month, $value->IRC_MONTH_ID);
 			}
-			// $MONTH = new Month_tbl_models();
-			// $getMonth = $MONTH->QueryResources([
-			// 	"WHERE" => [
-			// 		$MONTH->TB_NAME() => [
-			// 			"MONTH_ID" => [
-			// 				"DATA" => $temp_month,
-			// 				"CONDITION" => "not_in",
-			// 			]
-			// 		],
-			// 	],
-			// ]);
 			$serach = [
 				"WHERE" => [
 					"room" => [
@@ -1441,15 +1761,34 @@ class Home extends CI_Controller
 	public function make_contract_update_MOVEIN_PAY($MCO_ID)
 	{
 		$Make_contract = new Make_contract_models();
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$Make_contract_models = new Make_contract_models();
+		$Account_models = new Account_models();
+
+
 		$check = $Make_contract->UpdateResources([
 			"WHERE" => [
 				"MCO_ID" =>  $MCO_ID
 			],
 			"DATA" => [
-				// "RT_STATUS" => 0,
 				"MCO_MOVEIN_PAY" => 1,
 			],
 		]);
+		$Room->UpdateResources(
+			[
+				"WHERE" => [
+					"RM_MCO_ID" =>  $MCO_ID
+				],
+				"DATA" => [
+					"RM_USE" => 0,
+				],
+			]
+		);
 
 		if ($check) {
 			$url = base_url('home/make_contract');

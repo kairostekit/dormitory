@@ -86,7 +86,6 @@
 
 					<div class="clearfix"></div>
 
-					<!-- menu profile quick info -->
 					<div class="profile clearfix">
 						<div class="profile_pic">
 							<img src="<?= base_url('public/') ?>images/<?= $account->ACC_IMGE ?>" alt="..." class="img-circle profile_img">
@@ -96,11 +95,7 @@
 							<h2><?= $account->ACC_NAME ?></h2>
 						</div>
 					</div>
-					<!-- /menu profile quick info -->
-
 					<br />
-
-					<!-- sidebar menu -->
 					<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 						<div class="menu_section">
 							<h3>ทั่วไป</h3>
@@ -109,7 +104,6 @@
 								<li><a><i class="fa fa-dashboard"></i> Dashboard <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="<?= base_url('home') ?>">Dashboard</a></li>
-										<li><a href="<?= base_url('home/issue_receipt') ?>">ออกบิล</a></li>
 									</ul>
 								</li>
 								<li><a><i class="fa fa-dashboard"></i> จัดารบิล <span class="fa fa-chevron-down"></span></a>
@@ -139,11 +133,11 @@
 									</ul>
 								</li>
 
-								<li><a><i class="fa fa-desktop"></i>รายงาน <span class="fa fa-chevron-down"></span></a>
+								<!-- <li><a><i class="fa fa-desktop"></i>รายงาน <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="<?= base_url('') ?>">ประจำเดือน</a></li>
 									</ul>
-								</li>
+								</li> -->
 								<li><a><i class="fa fa-desktop"></i>จัดการผู้ดูแล <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="<?= base_url('home/admin') ?>">ข้อมูลผู้ดูแล</a></li>

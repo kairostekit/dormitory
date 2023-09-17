@@ -121,7 +121,7 @@ function getIssue_receiptDataRoomFull(value) {
 			})
 
 			// console.log();
-			
+
 			$("input[name='USER_ID']").val(resp.USER_ID);
 			$("input[name='IRC_ROOMRENT']").val(resp.RT_ROOMRENT);
 
@@ -144,7 +144,9 @@ function getIssue_receiptDataRoomFull(value) {
 function sumValue() {
 
 	$("#IRD_UNITSUSED-WATER").val(parseInt($("#IRD_THISNUM-WATER").val()) - parseInt($("#IRD_PERVIOUS-WATER").val()));
-	$("#IRD_UNITSUM-WATER").val(parseInt($("#IRD_UNITSUSED-WATER").val()) * parseInt($("#RT_WATER").val()))
+
+	let sumWater = parseInt($("#IRD_UNITSUSED-WATER").val()) * parseInt($("#RT_WATER").val());
+	$("#IRD_UNITSUM-WATER").val(sumWater <= 100 ? 100 : sumWater)
 
 
 	$("#IRD_UNITSUSED-ELE").val(parseInt($("#IRD_THISNUM-ELE").val()) - parseInt($("#IRD_PERVIOUS-ELE").val()));

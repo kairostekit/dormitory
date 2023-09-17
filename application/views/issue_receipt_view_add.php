@@ -37,9 +37,9 @@
 								<label class="col-form-label col-md-3 col-sm-3  label-align">ออกบิลของห้อง<span class="required">*</span></label>
 								<div class="col-md-6 col-sm-6">
 									<select name="RM_ID" class="form-control" required="required" onchange="getIssue_receiptDataRoomFull(this.value)">
-										<option value="">--เลือก--</option>
+										<option  value="">--เลือก--</option>
 										<?php foreach ($room_all as $key => $item) : ?>
-											<option value="<?= $item->RM_ID ?>"><?= $item->RM_NAME . "/" . $item->RM_NUMBER  ?></option>
+											<option <?= $RM_ID == $item->RM_ID ? "selected" :"" ?>  value="<?= $item->RM_ID ?>"><?= $item->RM_NAME . "/" . $item->RM_NUMBER  ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
@@ -186,6 +186,7 @@
 	}).prop('checked', false);
 	$(document).ready(function() {
 		// checkTypeRoom($("#RT_ID"));
-
+		<?= isset($RM_ID) ? "getIssue_receiptDataRoomFull('$RM_ID')" :"" ?>
+		
 	});
 </script>
