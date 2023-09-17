@@ -86,7 +86,7 @@
 
 										<td>
 											<a class="btn btn-sm btn-primary" href="<?= base_url('home/issue_receipt_view_edit/' . $ii->IRC_ID) ?>">รายละเอียด</a>
-											<a class="btn btn-sm btn-outline-info" href="<?= base_url('home/issue_receipt_view_print/' . $ii->IRC_ID) ?>">พิมพ์</a>
+											<a class="btn btn-sm btn-outline-info" target="_blank" href="<?= base_url('home/issue_receipt_view_print/' . $ii->IRC_ID) ?>">พิมพ์</a>
 										</td>
 									</tr>
 								<?php endforeach; ?>

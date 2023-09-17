@@ -678,7 +678,7 @@ class Home extends CI_Controller
 		}
 	}
 
-	public function room_update_move($RM_IDX)
+	public function room_update_move($RM_IDX = null)
 	{
 		$serach = array();
 
@@ -747,6 +747,69 @@ class Home extends CI_Controller
 			echo "<script>alert('บันทึกข้อมูลไม่สำเร็จ');history.back(-1)</script>";
 		}
 	}
+
+
+	public function room_update_moveIN($RM_IDX = null)
+	{
+		$RM_ID = null;
+		if (isset($RM_IDX)) {
+			$RM_ID = $RM_IDX;
+		}
+		if (isset($_POST["RM_ID"])) {
+			$RM_ID = $_POST["RM_ID"];
+		}
+		if (isset($_GET["RM_ID"])) {
+			$RM_ID = $_GET["RM_ID"];
+		}
+
+		$Make_contract = new Make_contract_models();
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$Make_contract_models = new Make_contract_models();
+		$Account_models = new Account_models();
+
+		$DATAR = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_ID" => $RM_ID
+				]
+			],
+			"ONE_ROW" => TRUE,
+		]);
+
+		$check = $Make_contract->UpdateResources([
+			"WHERE" => [
+				"MCO_ID" =>  $DATAR->RM_MCO_ID
+			],
+			"DATA" => [
+				"MCO_MOVEIN_PAY" => 1,
+			],
+		]);
+
+		$Room->UpdateResources(
+			[
+				"WHERE" => [
+					"RM_ID" =>  $RM_ID
+				],
+				"DATA" => [
+					"RM_USE" => 0,
+				],
+			]
+		);
+
+		if ($check) {
+			$url = base_url('home/make_contract');
+			echo "<script>alert('ย้ายเข้าอยู่สำเร็จ');location.assign('$url')</script>";
+		} else {
+			echo "<script>alert('ย้ายเข้าอยู่ไม่สำเร็จ');history.back(-1)</script>";
+		}
+	}
+
+
 	public function room_getData($RM_IDX)
 	{
 
@@ -1195,8 +1258,9 @@ class Home extends CI_Controller
 
 	public function issue_receipt_view_print($IRC_IDX = null)
 	{
+
+
 		$IRC_ID = null;
-		$data = array();
 		if (isset($IRC_IDX)) {
 			$IRC_ID = $IRC_IDX;
 		}
@@ -1208,9 +1272,95 @@ class Home extends CI_Controller
 		}
 
 
+		$data = array();
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$data['Issue_GET'] = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS" => 1,
+					"IRC_ID" =>  $IRC_ID
+				]
+			],
+			"JOIN" => [
+				// $Issue_receipt_details_models->TB_NAME() => [
+				// 	"ON" => "IRC_ID",
+				// 	"TYPE" => "INNER"
+				// ],
+				$month_tbl_models->TB_NAME() => [
+					"ON" => "MONTH_ID",
+					"TYPE" => "INNER",
+					"KEY_JOIN" => "IRC_MONTH_ID ",
+				],
+				$Room->TB_NAME() => [
+					"ON" => "RM_ID",
+					"TYPE" => "INNER",
+				],
+				$Users->TB_NAME() => [
+					"ON" => "USER_ID",
+					"TYPE" => "INNER",
+				],
+				$Room_type->TB_NAME() => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+					"JOIN" => $Room->TB_NAME()
+				]
+			],
+			"TYPE_RESULT" => "object",
+			"ONE_ROW" => TRUE,
+		]);
+
+		$IRC_ID   = $data['Issue_GET']->IRC_ID;
+
+
+		$RES = new Room_models();
+		$data['room_all'] = $RES->QueryResources([
+			"WHERE" => [
+				"room" => [
+					"RM_STATUS" => 1,
+				]
+			],
+			"JOIN" => [
+				"room_type" => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+				]
+			],
+			"TYPE_RESULT" => "object",
+		]);
+
+
+		$month_tbl_models = new month_tbl_models();
+		$MONTH = $month_tbl_models->QueryResources([
+			"WHERE" => [
+				$month_tbl_models->TB_NAME() => [
+					"MONTH_STATUS" => 1
+				]
+			],
+		]);
+
+		$data['MONTH_ALL'] = $MONTH;
+
+
+		$data['receipt_details'] = $Issue_receipt_details_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_details_models->TB_NAME() => [
+					"IRC_ID  " =>  $IRC_ID
+				]
+			],
+			"TYPE_RESULT" => "object",
+			"ONE_ROW" => false,
+		]);
 
 		$Load = new MY_Loader();
 		$Load->view("issue_receipt_view_print", $data);
+
+
 	}
 	public function issue_receipt_insert_add()
 	{
