@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($USER_ALL as $key => $ii) : ?>`
+                        <?php foreach ($USER_ALL as $key => $ii) : ?>
                         <tr>
                             <th scope="row"><?= $key + 1 ?></th>
                             <td><?= $ii->USER_CITIZEN ?> </td>

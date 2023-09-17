@@ -1,0 +1,140 @@
+<script>
+	$('#table-i').on('error.dt', function(e, settings, techNote, message) {
+		console.log('An error has been reported by DataTables: ', message);
+	}).DataTable();
+	$('#table-i').DataTable();
+</script>
+
+
+<div class="right_col" role="">
+	<div class="">
+		<div class="row mb-5">
+			<div class="page-title">
+				<div class="title_left">
+					<h1>รายงานการชำระเงิน</h1>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="row">
+			<div class="col-12">
+				<div class="x_panel">
+					<div class="x_title">
+						<h2>รายงานการชำระเงิน</h2>
+						<div class="clearfix"></div>
+					</div>
+					<div class="x_content">
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="pull-left"></div>
+							<div class="pull-right">
+								<form id="form-selsect" action="<?= base_url("home/payment_report/") ?>" method="get">
+									<select name="MONTH_ID" class="form-control" onchange="$('#form-selsect').submit()">
+										<option <?= $MONTH_ID ==  '-1' ? "selected" : "" ?> value="-1">---เลือกเดือน---</option>
+										<?php foreach ($MONTH_ALL as $key => $item) : ?>
+											<option <?= $MONTH_ID ==  $item->MONTH_ID ? "selected" : "" ?> value="<?= $item->MONTH_ID ?>">---<?= $item->MONTH_NAME ?>---</option>
+										<?php endforeach; ?>
+
+									</select>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<table id="table-id" class="table">
+						<thead>
+							<tr>
+
+								<th>ชื่อลูกค้า</th>
+								<th>บิลที่</th>
+								<th>เบอร์มือถือ</th>
+								<th>ห้อง</th>
+								<th>ประเภทห้อง</th>
+								<th>ค่าห้อง</th>
+								<th>สถานะ</th>
+								<th>วันที่ออกบิล</th>
+								<th>บิลของปี</th>
+								<th>รอบบิล</th>
+								<th>รวมจ่าย</th>
+
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php
+
+							$temp_USER_NAME = '';
+							foreach ($Issue_GET as $key => $ii) :
+								if ($temp_USER_NAME !=  $ii->USER_NAME) :
+									$temp_USER_NAME  =  $ii->USER_NAME ?>
+									<tr class="table-secondary">
+										<td><?= $ii->USER_NAME ?> </td>
+										<td></td>
+										<td><?= $ii->USER_PHONE ?></td>
+										<td><?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?> </td>
+										<td><?= $ii->RT_NAME ?> </td>
+										<td><?= $ii->IRC_ROOMRENT ?> </td>
+										<td></td>
+										<td></td>
+										<td><?= (int)$ii->IRC_YEAR + 543 ?> </td>
+										<td></td>
+
+									</tr>
+								<?php continue;
+								endif; ?>
+
+								<tr>
+
+									<td></td>
+									<td><?= sprintf("IRC-%010d", $ii->IRC_ID) ?> </td>
+									<td></td>
+									<td> </td>
+									<td></td>
+									<td> </td>
+									<td>
+										<?php
+										$msge = '';
+										if ($ii->IRC_STATUS_CANCEL == 1) :
+											$msge .= "ถูกยกเลิกบิล - ";
+										else :
+											$msge .= "";
+										endif;
+
+										if ($ii->IRC_PAYMENT_OK == 1) {
+											if ($ii->IRC_PAYMENTFORMAT == 1) {
+												$msge .= "(จ่ายแล้ว - เงินโอน)";
+											} else {
+												$msge .= "(จ่ายแล้ว - เงินสด)";
+											}
+										} else {
+											$url = base_url('home/issue_receipt_update_IRC_PAYMENT_OK/' . $ii->IRC_ID);
+											$msge .= "<p class=\"text-danger\"  >ยังไม่ชำระ</p>";
+										}
+										echo $msge;
+
+										?>
+									</td>
+									<td><?= DateThai($ii->IRC_STAMP)  ?> </td>
+									<td> </td>
+									<td><?= $ii->MONTH_NAME  ?> </td>
+									<td><?= $ii->IRC_TOTAL  ?> </td>
+
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+						<tfoot>
+
+						</tfoot>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

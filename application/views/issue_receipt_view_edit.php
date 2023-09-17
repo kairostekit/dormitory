@@ -63,7 +63,7 @@
 									<h6>ชื่อ-นามสกุลผู้เช่า : <span id='user_name'></span></h5>
 								</div>
 								<div class="col-4">
-									<h6>ปปช. : <span id='user_idcard'></span></h5>
+									<h6>รหัสประจำตัวประชาชน : <span id='user_idcard'></span></h5>
 								</div>
 								<div class="col-4">
 									<h6>เบอร์มือถือ : <span id='user_phone'></span></h5>

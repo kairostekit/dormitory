@@ -97,6 +97,7 @@ class Home extends CI_Controller
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => 1,
+					"RM_STATUS" => 1,
 				]
 			]
 		]);
@@ -105,7 +106,7 @@ class Home extends CI_Controller
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => 0,
-					"USER_ID !=" => null
+					"RM_STATUS" => 1,
 				]
 			]
 		]);
@@ -114,6 +115,7 @@ class Home extends CI_Controller
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => "S",
+					"RM_STATUS" => 1,
 				]
 			]
 		]);
@@ -1359,8 +1361,6 @@ class Home extends CI_Controller
 
 		$Load = new MY_Loader();
 		$Load->view("issue_receipt_view_print", $data);
-
-
 	}
 	public function issue_receipt_insert_add()
 	{
@@ -1946,5 +1946,109 @@ class Home extends CI_Controller
 		} else {
 			echo "<script>alert('จ่ายไม่สำเร็จ');history.back(-1)</script>";
 		}
+	}
+
+
+
+
+
+	public function payment_report($MONTH_IDX = null)
+	{
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Room = new Room_models();
+		$Room_type = new Room_type_models();
+		$Users = new Users_info_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+
+
+		$MONTH_ID  = null;
+		if (isset($MONTH_IDX)) {
+			$MONTH_ID = $MONTH_IDX;
+		}
+		if (isset($_POST["MONTH_ID"])) {
+			$MONTH_ID = $_POST["MONTH_ID"];
+		}
+		if (isset($_GET["MONTH_ID"])) {
+			$MONTH_ID = $_GET["MONTH_ID"];
+		}
+
+		$WHERE = [
+			$Issue_receipt_models->TB_NAME() => [
+				"IRC_STATUS" => 1,
+				"IRC_YEAR" => date("Y"),
+				"IRC_STATUS_CANCEL" => 0
+			],
+
+		];
+
+
+		if ($MONTH_ID != null) {
+
+			if ($MONTH_ID != "-1") {
+				$WHERE[$Issue_receipt_models->TB_NAME()]['IRC_MONTH_ID'] =  $MONTH_ID;
+			}
+		}
+
+
+
+		$data['Issue_GET'] = $Issue_receipt_models->QueryResources([
+			"WHERE" => $WHERE,
+			"JOIN" => [
+				$Issue_receipt_details_models->TB_NAME() => [
+					"ON" => "IRC_ID",
+					"TYPE" => "INNER"
+				],
+				$month_tbl_models->TB_NAME() => [
+					"ON" => "MONTH_ID",
+					"TYPE" => "INNER",
+					"KEY_JOIN" => "IRC_MONTH_ID",
+				],
+				$Room->TB_NAME() => [
+					"ON" => "RM_ID",
+					"TYPE" => "INNER",
+				],
+				$Users->TB_NAME() => [
+					"ON" => "USER_ID",
+					"TYPE" => "INNER",
+				],
+				$Room_type->TB_NAME() => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+					"JOIN" => $Room->TB_NAME()
+				]
+			],
+			"ORDER_BY" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_ID" => "ASC"
+				]
+				// $Users->TB_NAME() => [
+				// 	"USER_NAME" => "ASC"
+				// ],
+				// $month_tbl_models->TB_NAME() => [
+				// 	"MONTH_ID" => "ASC"
+				// ],
+			],
+			"TYPE_RESULT" => "object",
+			"ONE_ROW" => false,
+		]);
+
+
+
+		$month_tbl_models = new month_tbl_models();
+		$MONTH = $month_tbl_models->QueryResources([
+			"WHERE" => [
+				$month_tbl_models->TB_NAME() => [
+					"MONTH_STATUS" => 1
+				]
+			],
+		]);
+
+		$data['MONTH_ALL'] = $MONTH;
+		$data['MONTH_ID'] = $MONTH_ID;
+		// echo json_encode($data);
+		$Load = new MY_Loader();
+		$Load->template("payment_report", $data);
 	}
 }

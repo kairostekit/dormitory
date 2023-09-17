@@ -37,7 +37,7 @@
                         <tbody>
                             <?php foreach ($account_ACC as $key => $ii) : ?>
                                 <tr>
-                                    <th scope="row"><?= 1; ?></th>
+                                    <th scope="row"><?= $key +1; ?></th>
                                     <td><?= $ii->ACC_NAME; ?></td>
                                     <td><?= $ii->ACC_USERNAME; ?></td>
                                     <td><?= $ii->ACC_PASSWORD; ?></td>

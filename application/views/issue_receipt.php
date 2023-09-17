@@ -18,7 +18,7 @@
 			<div class="col-md-12 col-sm-12  ">
 				<div class="x_panel">
 					<div class="x_title">
-						<h2>ข้อมูลประวัติออกบิท</h2>
+						<h2>ข้อมูลประวัติออกบิล</h2>
 						<ul class="nav navbar-right panel_toolbox">
 							<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 							</li>
@@ -73,7 +73,7 @@
 												}
 											} else {
 												$url = base_url('home/issue_receipt_update_IRC_PAYMENT_OK/' . $ii->IRC_ID);
-												$msge .= "<a class=\"text-danger\" href='javascript:if(confirm(\"ยื่นยันกาจ่าย?\")){location.assign(\"$url\")};' >ยังไม่ชำระ</a>";
+												$msge .= "<a class=\"text-danger\" href='javascript:if(confirm(\"ยื่นยันการจ่าย?\")){location.assign(\"$url\")};' >ยังไม่ชำระ</a>";
 											}
 											echo $msge;
 

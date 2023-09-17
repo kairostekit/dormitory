@@ -1,9 +1,11 @@
 <?php
 
 define('APP_NAME', "ระบบจัดการหอพักรายเดือน");
-define('DORMITORY_NAME', "ชื่อหอพัก", false);
 
-define('DORMITORY_ADDESS', "18 อาคาร ทรู ทาวเวอร์ ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพฯ 10310");
+
+define('DORMITORY_NAME', "หอพักแมเนอร์", false);
+define('DORMITORY_ADDESS', "107 หมู่ 12 ตำบลกำแพงแสน อำเภอกำแพงแสน จังหวัดนครปฐม 73140");
+
 
 
 

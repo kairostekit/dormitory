@@ -60,7 +60,7 @@
 									<td><?= $ii->RT_ROOMSIZE ?> </td>
 									<td><?= $ii->RT_WATER . '/' . $ii->RT_ELECTRICCTY ?> </td>
 									<td><?= $ii->RM_DETAILS ?> </td>
-									<td><?= ($ii->RM_USE == 1 ? "<span class='badge  badge-primary'>ห้องว่าง</span>" : $ii->RM_USE == "S") ?  "<span class='badge badge-info'>จอง</span>": "<span class='badge badge-danger'>ไม่ว่าง</span>" ?> </td>
+									<td><?= ($ii->RM_USE == 1 ? "<span class='badge  badge-primary'>ห้องว่าง</span>" : $ii->RM_USE == "S") ?  "<span class='badge badge-danger'>ไม่ว่าง</span>": "<span class='badge badge-danger'>ไม่ว่าง</span>" ?> </td>
 									<td><?= $ii->USER_NAME == null ? "-" : $ii->USER_NAME  ?> </td>
 									<td><?= $ii->RM_MOVEINDATE == null ? "-" : DateThai($ii->RM_MOVEINDATE)   ?> </td>
 									<td>

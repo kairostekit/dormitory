@@ -31,10 +31,10 @@
 					<span class="count_top"> <i class="fa fa-clock-o"></i> ห้องว่างไม่ว่าง</span>
 					<div class="count"><?= $จำนวนห้องไม่ว่าง ?> ห้อง</div>
 				</div>
-				<div class="col-md-2 col-sm-4  tile_stats_count">
+				<!-- <div class="col-md-2 col-sm-4  tile_stats_count">
 					<span class="count_top"> <i class="fa fa-clock-o"></i> ห้องถูกจอง</span>
 					<div class="count"><?= $จำนวนห้องถูกจอง ?> ห้อง</div>
-				</div>
+				</div> -->
 				<div class="col-md-2 col-sm-4  tile_stats_count">
 					<span class="count_top"> <i class="fa fa-clock-o"></i> บิลค้างชำระ</span>
 					<div class="count"><?= $จำนวนบิลค้างชำระ ?> บิล</div>
@@ -86,7 +86,7 @@
 								});
 							</script>
 						</div>
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4" >
 							<h3 class="">สถานะห้องว่าง</h3>
 
 							<div>
@@ -98,10 +98,12 @@
 								const chx = new Chart(ctxx, {
 									type: 'doughnut',
 									data: {
-										labels: ['ห้องว่าง', 'ห้องไม่ว่าง', "ห้องถูกจอง"],
+										labels: ['ห้องว่าง', 'ห้องไม่ว่าง'],
+										// labels: ['ห้องว่าง', 'ห้องไม่ว่าง', "ห้องถูกจอง"],
 										datasets: [{
 											label: 'จำนวน',
-											data: [<?= $จำนวนห้องว่าง ?>, <?= $จำนวนห้องไม่ว่าง ?>, <?= $จำนวนห้องถูกจอง ?>],
+											data: [<?= $จำนวนห้องว่าง ?>, <?= $จำนวนห้องไม่ว่าง ?>],
+											// data: [<?= $จำนวนห้องว่าง ?>, <?= $จำนวนห้องไม่ว่าง ?>, <?= $จำนวนห้องถูกจอง ?>],
 											borderWidth: 1
 										}]
 									},
@@ -122,7 +124,7 @@
 								});
 							</script>
 						</div>
-						<div class="col-sm-6 col-md-4">
+						<div class="col-sm-6 col-md-4" style="display: none;">
 							<h3 class="">สถานะการเข้าอยู่</h3>
 
 							<div>
