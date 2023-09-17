@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2023 at 08:12 PM
+-- Generation Time: Sep 16, 2023 at 02:20 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -31,7 +31,7 @@ CREATE TABLE `account` (
   `ACC_ID` int(11) NOT NULL,
   `ACC_NAME` varchar(100) NOT NULL,
   `ACC_IMGE` varchar(100) NOT NULL DEFAULT 'user.png',
-  `ACC_STATUS` varchar(2) DEFAULT NULL,
+  `ACC_STATUS` varchar(2) DEFAULT '1',
   `ACC_STAMP` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `ACC_USERNAME` varchar(50) NOT NULL,
   `ACC_PASSWORD` varchar(50) NOT NULL
@@ -42,7 +42,7 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`ACC_ID`, `ACC_NAME`, `ACC_IMGE`, `ACC_STATUS`, `ACC_STAMP`, `ACC_USERNAME`, `ACC_PASSWORD`) VALUES
-(1, 'ADMIN ADMIN', 'user.png', NULL, '2023-09-15 00:14:57', 'admin', 'admin');
+(1, 'ROOT USER', 'user.png', '1', '2023-09-16 19:17:26', 'root', 'root');
 
 -- --------------------------------------------------------
 
@@ -94,14 +94,22 @@ CREATE TABLE `make_contract` (
   `MCO_DEPOSIT` decimal(10,2) NOT NULL COMMENT 'เงินประกัน	',
   `MCO_RESERVE` decimal(10,2) NOT NULL COMMENT 'ค่าสัญญาจอง',
   `USER_ID` int(11) NOT NULL,
-  `MCO_RESERVE_PAY` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'ค่าสัญญาจอง 1 จ่ายแล้ว  0 ยังไม่จ่าย',
+  `MCO_RESERVE_PAY` tinyint(1) NOT NULL DEFAULT 1 COMMENT 'ค่าสัญญาจอง 1 จ่ายแล้ว  0 ยังไม่จ่าย',
   `MCO_MOVEIN` decimal(10,2) NOT NULL COMMENT 'ค่าสัญญาย้ายเข้า',
   `MCO_MOVEIN_PAY` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'ค่าย้ายเข้า 1 จ่ายแล้ว  0 ยังไม่จ่าย',
   `MCO_CONDITIONS` text NOT NULL COMMENT 'เงือนไขการคืนเงิน',
-  `MCO_DATE` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'ทำสัญญาวันที่',
+  `MCO_DATE` date DEFAULT NULL COMMENT 'ทำสัญญาวันที่',
   `MCO_STATUS_CANCEL` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'C = 1 NC = 0',
-  `MCO_STATUS` varchar(30) NOT NULL,
-  `MCO_STATUS_SUCCESS` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'จบ 1  ยังไม่จบ 0'
+  `MCO_STATUS` varchar(30) NOT NULL DEFAULT '1',
+  `MCO_STATUS_SUCCESS` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'จบ 1  ยังไม่จบ 0',
+  `MCO_USER_PHONE` varchar(100) NOT NULL,
+  `MCO_USER_NAME` varchar(100) NOT NULL,
+  `MCO_MOVEIN_DATE` date NOT NULL,
+  `MCO_ROOM_TYPE_NAME` varchar(100) NOT NULL,
+  `MCO_DETAILS` text NOT NULL,
+  `MCO_ROOMRENT` decimal(10,2) NOT NULL,
+  `MCO_RM_NAME` varchar(100) NOT NULL,
+  `MCO_RM_NUMBER` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -113,12 +121,12 @@ CREATE TABLE `make_contract` (
 CREATE TABLE `room` (
   `RM_ID` int(11) NOT NULL,
   `RM_NUMBER` varchar(100) NOT NULL COMMENT 'เลขห้อง',
-  `RM_DETAILS` text NOT NULL COMMENT 'รายละเอียด',
-  `RM_STATUS` varchar(30) NOT NULL,
-  `RM_USE` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1 ว่าง  0 ไม่ว่าง',
+  `RM_STATUS` varchar(30) NOT NULL DEFAULT '1',
+  `RM_USE` varchar(13) NOT NULL DEFAULT '1' COMMENT '1 ว่าง  S ถูกจอง 0 ไม่ว่าง',
   `RT_ID` int(11) NOT NULL COMMENT 'รหัส TYPE',
   `RM_NAME` varchar(255) NOT NULL COMMENT 'ชื่อห้อง',
-  `USER_ID` int(11) NOT NULL COMMENT 'คนที่พัก'
+  `USER_ID` int(11) DEFAULT NULL COMMENT 'คนที่พัก',
+  `RM_MOVEINDATE` date DEFAULT NULL COMMENT 'วันที่เริ่มเข้าอยู่'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -130,7 +138,7 @@ CREATE TABLE `room` (
 CREATE TABLE `room_type` (
   `RT_ID` int(11) NOT NULL,
   `RT_NAME` varchar(50) NOT NULL,
-  `RT_STATUS` varchar(5) DEFAULT NULL,
+  `RT_STATUS` varchar(5) DEFAULT '1',
   `RT_STAMP` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `RT_DEPOSIT` decimal(10,2) DEFAULT NULL COMMENT 'เงินประกัน',
   `RT_RESERVE` decimal(10,2) DEFAULT NULL COMMENT 'ทำสัญญาจอง',
@@ -156,7 +164,10 @@ CREATE TABLE `users_info` (
   `USER_PHONE` varchar(50) NOT NULL COMMENT 'เบอร์',
   `USER_DETAILS` text NOT NULL COMMENT 'รายละเอียด',
   `USER_STAMP` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `ACC_ID` int(11) DEFAULT NULL COMMENT 'รหัสแอดมัน'
+  `ACC_ID` int(11) DEFAULT NULL COMMENT 'รหัสแอดมัน',
+  `USER_RM_ID` int(11) DEFAULT NULL,
+  `USER_STATUS` varchar(11) NOT NULL DEFAULT '1',
+  `USER_CITIZEN` varchar(20) DEFAULT NULL COMMENT '13 ปปช'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -197,8 +208,8 @@ ALTER TABLE `make_contract`
 --
 ALTER TABLE `room`
   ADD PRIMARY KEY (`RM_ID`),
-  ADD KEY `a` (`RT_ID`),
-  ADD KEY `us` (`USER_ID`);
+  ADD KEY `us` (`USER_ID`),
+  ADD KEY `sdf` (`RT_ID`);
 
 --
 -- Indexes for table `room_type`
@@ -288,13 +299,15 @@ ALTER TABLE `make_contract`
 --
 ALTER TABLE `room`
   ADD CONSTRAINT `a` FOREIGN KEY (`RT_ID`) REFERENCES `room_type` (`RT_ID`),
+  ADD CONSTRAINT `sdf` FOREIGN KEY (`RT_ID`) REFERENCES `room_type` (`RT_ID`),
   ADD CONSTRAINT `us` FOREIGN KEY (`USER_ID`) REFERENCES `users_info` (`USER_ID`);
 
 --
 -- Constraints for table `users_info`
 --
 ALTER TABLE `users_info`
-  ADD CONSTRAINT `dddd` FOREIGN KEY (`ACC_ID`) REFERENCES `account` (`ACC_ID`);
+  ADD CONSTRAINT `dddd` FOREIGN KEY (`ACC_ID`) REFERENCES `account` (`ACC_ID`),
+  ADD CONSTRAINT `fg` FOREIGN KEY (`USER_RM_ID`) REFERENCES `room` (`RM_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

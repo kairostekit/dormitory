@@ -106,7 +106,7 @@
 								<label class="col-form-label col-md-3 col-sm-3  label-align">รายเอียด</label>
 								<div class="col-md-6 col-sm-6">
 									<textarea disabled name="RT_DETAILS" class="form-control" id="" cols="30" rows="5"></textarea>
-
+									<input type="hidden" name="RM_DETAILS">
 								</div>
 							</div>
 							<div class="ln_solid">

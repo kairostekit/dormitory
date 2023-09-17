@@ -9,9 +9,9 @@ class Home extends CI_Controller
 		parent::__construct();
 
 
-		if (!isset($_SESSION["account"])) {
-			redirect(base_url());
-		}
+		// if (!isset($_SESSION["account"])) {
+		// 	redirect(base_url());
+		// }
 	}
 
 
@@ -567,6 +567,75 @@ class Home extends CI_Controller
 		}
 	}
 
+	public function room_update_move($RM_IDX)
+	{
+		$serach = array();
+
+		$Room = new Room_models();
+		$RM_ID  = null;
+
+
+
+		if (isset($RM_IDX)) {
+			$RM_ID = $RM_IDX;
+		}
+		if (isset($_POST["RM_ID"])) {
+			$RM_ID = $_POST["RM_ID"];
+		}
+
+		$DATA = $Room->QueryResources([
+			"WHERE" => [
+				"RM_ID" => $RM_ID
+			],
+			"ONE_ROW" => TRUE,
+		]);
+
+
+
+
+		$USER_ID  = $DATA->USER_ID;
+		$RM_MCO_ID  = $DATA->RM_MCO_ID;
+		$USER = new Users_info_models();
+		$USER->UpdateResources([
+			"WHERE" => [
+				"USER_ID" =>  $USER_ID
+			],
+			"DATA" => [
+				"USER_RM_ID" => NULL,
+			],
+		]);
+
+		$MCO = new Make_contract_models();
+		$MCO->UpdateResources([
+			"WHERE" => [
+				"MCO_ID" =>  $RM_MCO_ID
+			],
+			"DATA" => [
+				"MCO_STATUS_SUCCESS" => 1,
+				"MCO_STATUS_MOVE" => 1,
+			],
+		]);
+
+		$check = $Room->UpdateResources([
+			"WHERE" => [
+				"RM_ID" =>  $RM_ID
+			],
+			"DATA" => [
+				"RM_STATUS" => 1,
+				"USER_ID" =>  NULL,
+				"RM_MOVEINDATE" => NULL,
+				"RM_USE" => 1
+			],
+		]);
+
+
+		if ($check) {
+			$url = base_url('home/room');
+			echo "<script>alert('บันทึกข้อมูลสำเร็จ');location.assign('$url')</script>";
+		} else {
+			echo "<script>alert('บันทึกข้อมูลไม่สำเร็จ');history.back(-1)</script>";
+		}
+	}
 	public function room_getData($RM_IDX)
 	{
 
@@ -770,7 +839,7 @@ class Home extends CI_Controller
 			$serach = [
 				"WHERE" => [
 					"room_type" => [
-						"RT_ID " => $RT_ID,
+						"RT_ID" => $RT_ID,
 					]
 				],
 				"ONE_ROW" => true,
@@ -790,21 +859,263 @@ class Home extends CI_Controller
 
 	public function issue_receipt()
 	{
+		$data = array();
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$data['Issue_receipt_all'] = $Issue_receipt_models->QueryResources([
+			"WHERE" => [
+				$Issue_receipt_models->TB_NAME() => [
+					"IRC_STATUS" => 1
+				]
+			],
+			"JOIN" => [
+				$Issue_receipt_details_models->TB_NAME() => [
+					"ON" => "IRC_ID",
+					"TYPE" => "INNER"
+				],
+				$month_tbl_models->TB_NAME() => [
+					"ON" => "MONTH_ID",
+					"TYPE" => "INNER",
+					"KEY_JOIN" => "IRC_MONTH_ID ",
+				]
+			],
+			"TYPE_RESULT" => "object",
+		]);
+
+		echo json_encode($data);
+		$Load = new MY_Loader();
+		// $Load->template("room_type", $data);
 	}
 	public function issue_receipt_view_add()
 	{
+		$IRC_ID = null;
+		if (isset($_POST["IRC_ID"])) {
+			$IRC_ID = $_POST["IRC_ID"];
+		}
+		if (isset($_GET["IRC_ID"])) {
+			$IRC_ID = $_GET["IRC_ID"];
+		}
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+		$month_tbl_models = new month_tbl_models();
+		$MONTH = $month_tbl_models->QueryResources([
+			"WHERE" => [
+				$month_tbl_models->TB_NAME() => [
+					"MONTH_STATUS" => 1
+				]
+			],
+		]);
+
+		$data = array();
+		$data = [
+			"IRC_ID" => $IRC_ID,
+			"MONTH_ALL" => $MONTH
+		];
+
+		$RES = new Room_models();
+		$data['room_all'] = $RES->QueryResources([
+			"WHERE" => [
+				"room" => [
+					"RM_STATUS" => 1,
+				]
+			],
+			"JOIN" => [
+				"room_type" => [
+					"ON" => "RT_ID",
+					"TYPE" => "INNER",
+				],
+				"users_info" => [
+					"ON" => "USER_ID",
+					"TYPE" => "INNER",
+				]
+			],
+			"TYPE_RESULT" => "object",
+		]);
+
+
+		// $RES = new Users_info_models();
+		// $data['Users_info_all'] = $RES->QueryResources([
+		// 	"WHERE" => [
+		// 		"users_info" => [
+		// 			"USER_STATUS" => 1,
+		// 			"USER_RM_ID" => NULL
+		// 		]
+		// 	],
+		// 	"TYPE_RESULT" => "object",
+		// ]);
+
+
+		// array_push($data,"IRC_ID"=>$IRC_ID);
+		// if(isset($_POST["
+		// echo json_encode($data);
+		$Load = new MY_Loader();
+		$Load->template("issue_receipt_view_add", $data);
 	}
 	public function issue_receipt_view_edit($IRC_ID)
 	{
 	}
 	public function issue_receipt_insert_add()
 	{
+
+
+		if (isset($_POST["RM_ID"])) {
+			$RM_ID = $_POST["RM_ID"];
+			$IRC_MONTH_ID = $_POST["IRC_MONTH_ID"];
+
+			$TABELLISTNAME_length = $_POST["TABELLISTNAME_length"];
+			$IRD_LISTNAME = $_POST["IRD_LISTNAME"];
+			$IRD_PERVIOUS = $_POST["IRD_PERVIOUS"];
+			$IRD_THISNUM = $_POST["IRD_THISNUM"];
+			$IRD_UNITSUSED = $_POST["IRD_UNITSUSED"];
+			$IRD_PERUNITS = $_POST["IRD_PERUNITS"];
+			$IRD_UNITSUM = $_POST["IRD_UNITSUM"];
+
+			$USER_ID = $_POST["USER_ID"];
+			$IRC_ROOMRENT = $_POST["IRC_ROOMRENT"];
+		}
+
+
+
+
+		$Issue_receipt_models = new Issue_receipt_models();
+		$Issue_receipt_details_models = new Issue_receipt_details_models();
+
+		$LasID = $Issue_receipt_models->InsertResources([
+			"RM_ID" => $RM_ID,
+			"USER_ID" => $USER_ID,
+			"IRC_TOTAL" => array_sum($IRD_UNITSUM) + $IRC_ROOMRENT,
+			"IRC_ROOMRENT" => $IRC_ROOMRENT,
+			"IRC_WATER" => $IRD_UNITSUM[0],
+			"IRC_ELECTRICCTY" =>  $IRD_UNITSUM[1],
+			"IRC_YEAR" => date("Y"),
+			"IRC_MONTH_ID" => $IRC_MONTH_ID,
+		]);
+
+		foreach ($IRD_LISTNAME as $key => $item) :
+			$Issue_receipt_details_models->InsertResources([
+				"IRC_ID" => $LasID,
+				"IRD_LISTNAME" => $item,
+				"IRD_PERVIOUS" => $IRD_PERVIOUS[$key],
+				"IRD_THISNUM" => $IRD_THISNUM[$key],
+				"IRD_UNITSUSED" => $IRD_UNITSUSED[$key],
+				"IRD_PERUNITS" => $IRD_PERUNITS[$key],
+				"IRD_UNITSUM" => $IRD_UNITSUM[$key],
+			]);
+		endforeach;
+
+		if ($LasID) {
+			$url = base_url('home/issue_receipt');
+			echo "<script>alert('เพิ่มข้อมูลสำเร็จ');location.assign('$url')</script>";
+		} else {
+			echo "<script>alert('เพิ่มข้อมูลไม่สำเร็จ');history.back(-1)</script>";
+		}
+
 	}
 	public function issue_receipt_update_edit($IRC_ID)
 	{
 	}
 	public function issue_receipt_update_delete($IRC_ID)
 	{
+	}
+
+	public function issue_receipt_getDataRom($RM_IDx)
+	{
+		$serach = array();
+
+
+
+		$Room = new Room_models();
+		$RM_ID  = null;
+
+		if (isset($RM_IDx)) {
+			$RM_ID = $RM_IDx;
+		}
+		if (isset($_POST["RM_ID"])) {
+			$RM_ID = $_POST["RM_ID"];
+		}
+
+		$Room = new Room_models();
+		$serach = array();
+		if (isset($RM_ID)) {
+			$serach = [
+				"WHERE" => [
+					"room" => [
+						"RM_ID" => $RM_ID,
+					],
+					"issue_receipt" => [
+						"IRC_YEAR" => date("Y"),
+					]
+				],
+				"JOIN" => [
+					"room_type" => [
+						"ON" => "RT_ID",
+						"TYPE" => "INNER",
+					],
+					"users_info" => [
+						"ON" => "USER_ID",
+						"TYPE" => "INNER",
+					],
+					"issue_receipt" => [
+						"ON" => "RM_ID",
+						"TYPE" => "INNER",
+					]
+				],
+				"GROUP_BY" => [
+					"issue_receipt" => ["IRC_MONTH_ID"]
+				],
+				"ONE_ROW" => false,
+			];
+
+			$MONTHGroup = $Room->QueryResources($serach);
+			$temp_month = array();
+			foreach ($MONTHGroup as $key => $value) {
+				array_push($temp_month, $value->IRC_MONTH_ID);
+			}
+			// $MONTH = new Month_tbl_models();
+			// $getMonth = $MONTH->QueryResources([
+			// 	"WHERE" => [
+			// 		$MONTH->TB_NAME() => [
+			// 			"MONTH_ID" => [
+			// 				"DATA" => $temp_month,
+			// 				"CONDITION" => "not_in",
+			// 			]
+			// 		],
+			// 	],
+			// ]);
+			$serach = [
+				"WHERE" => [
+					"room" => [
+						"RM_ID" => $RM_ID,
+					],
+				],
+				"JOIN" => [
+					"room_type" => [
+						"ON" => "RT_ID",
+						"TYPE" => "INNER",
+					],
+					"users_info" => [
+						"ON" => "USER_ID",
+						"TYPE" => "INNER",
+					],
+				],
+
+				"ONE_ROW" => true,
+			];
+
+			$ROOMDATA = $Room->QueryResources($serach);
+
+			$data = [
+				"MONTH_CHECK" => $temp_month,
+				"DATA" => $ROOMDATA,
+			];
+			echo json_encode($data);
+			return;
+		} else {
+			$serach = array();
+		}
 	}
 
 
@@ -875,7 +1186,8 @@ class Home extends CI_Controller
 		$data['Users_info_all'] = $RES->QueryResources([
 			"WHERE" => [
 				"users_info" => [
-					"USER_STATUS" => 1
+					"USER_STATUS" => 1,
+					"USER_RM_ID" => NULL
 				]
 			],
 			"TYPE_RESULT" => "object",
@@ -941,7 +1253,9 @@ class Home extends CI_Controller
 
 
 		$make_contract = new Make_contract_models();
-		$Last = $make_contract->InsertResources($this->input->post());
+		$LastID = $make_contract->InsertResources($this->input->post());
+
+
 
 		$ROOM = new Room_models();
 		$ROOM->UpdateResources([
@@ -950,6 +1264,9 @@ class Home extends CI_Controller
 			],
 			"DATA" => [
 				"RM_USE" => "S",
+				"USER_ID" => $USER_ID,
+				"RM_MOVEINDATE" => $_POST["MCO_MOVEIN_DATE"],
+				"RM_MCO_ID" => $LastID
 			],
 		]);
 
@@ -960,9 +1277,11 @@ class Home extends CI_Controller
 			],
 			"DATA" => [
 				"USER_RM_ID" => $RM_ID,
+				"USER_MCO_ID" => $LastID,
 			],
 		]);
-		if ($Last) {
+
+		if ($LastID) {
 			$url = base_url('home/make_contract');
 			echo "<script>alert('ทำสัญญาสำเร็จ');location.assign('$url')</script>";
 		} else {
@@ -976,13 +1295,38 @@ class Home extends CI_Controller
 		$user_info = new Make_contract_models();
 
 		$MCO_ID  = null;
-
 		if (isset($MCO_IDX)) {
 			$MCO_ID = $MCO_IDX;
 		}
 		if (isset($_POST["MCO_ID"])) {
 			$MCO_ID = $_POST["MCO_ID"];
 		}
+
+
+		$ROOM = new Room_models();
+		$ROOM->UpdateResources([
+			"WHERE" => [
+				"RM_MCO_ID" => $MCO_ID
+			],
+			"DATA" => [
+				"RM_USE" => 1,
+				"USER_ID" => NULL,
+				"RM_MOVEINDATE" => NULL,
+				"RM_MCO_ID" => NULL
+			],
+		]);
+
+		$USER = new Users_info_models();
+		$USER->UpdateResources([
+			"WHERE" => [
+				"USER_MCO_ID" => $MCO_ID
+			],
+			"DATA" => [
+				"USER_RM_ID" => NULL,
+				"USER_MCO_ID" => NULL,
+			],
+		]);
+
 
 
 		$CLASS = new Make_contract_models();

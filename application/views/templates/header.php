@@ -71,7 +71,7 @@
 		});
 	</script>
 
-	
+
 
 </head>
 
@@ -112,6 +112,12 @@
 										<li><a href="<?= base_url('home/issue_receipt') ?>">ออกบิล</a></li>
 									</ul>
 								</li>
+								<li><a><i class="fa fa-dashboard"></i> จัดารบิล <span class="fa fa-chevron-down"></span></a>
+									<ul class="nav child_menu">
+										<li><a href="<?= base_url('home/issue_receipt') ?>">รายการบิล</a></li>
+										<li><a href="<?= base_url('home/issue_receipt_view_add') ?>">ออกบิล</a></li>
+									</ul>
+								</li>
 								<li><a><i class="fa fa-file"></i> จัดการสัญญา <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="<?= base_url('home/make_contract_view_add') ?>">ทำสัญญา</a></li>
@@ -127,7 +133,6 @@
 								<li><a><i class="fa fa-desktop"></i>จัดการห้อง <span class="fa fa-chevron-down"></span></a>
 									<ul class="nav child_menu">
 										<li><a href="<?= base_url('home/room') ?>">ข้อมูลห้อง</a></li>
-										<li><a href="<?= base_url('home/receipt_view_add') ?>">ออกบิทรายเดือน</a></li>
 										<li><a href="<?= base_url('home/room_view_add') ?>">เพิ่มห้อง</a></li>
 										<li><a href="<?= base_url('home/room_type') ?>">ข้อมูลประเภทห้อง</a></li>
 										<li><a href="<?= base_url('home/room_type_view_add') ?>">เพิ่มประเภทห้อง</a></li>

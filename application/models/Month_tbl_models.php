@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Room_models extends CI_Model
+class Month_tbl_models extends CI_Model
 {
     var $mssqlrmst;
     private $mssql = null;
     private static $smssql = null;
-    private static $sPRIMARY_KEY = "RM_ID";
-    public static $sTABLE_NAME = "room";
+    private static $sPRIMARY_KEY = "MONTH_ID";
+    public static $sTABLE_NAME = "month_tbl";
 
 
 
@@ -629,7 +629,7 @@ class Room_models extends CI_Model
 
             return $temp;
         } catch (Exception $e) {
-            return array();
+            return $e;
             // return $temp;
         }
     }

@@ -41,7 +41,7 @@
                                     <td><?= $ii->ACC_NAME; ?></td>
                                     <td><?= $ii->ACC_USERNAME; ?></td>
                                     <td><?= $ii->ACC_PASSWORD; ?></td>
-                                    <td><a class="btn btn-sm btn-warning" href="<?= base_url('home/admin_view_edit/' . $ii->ACC_ID) ?>">แก้ไข</a></td>
+                                    <td><a style="display: <?= $ii->ACC_ID  == 1 ? "none":"block" ?> ;" class="btn btn-sm btn-warning" href="<?= base_url('home/admin_view_edit/' . $ii->ACC_ID) ?>">แก้ไข</a></td>
                                 </tr>
                             <?php endforeach; ?>
 

@@ -183,6 +183,7 @@
 									<div class="col-md-6 offset-md-3">
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
 										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/make_contract_update_delete/' . $MCO->MCO_ID) ?>')};">ยกเลิกสัญญา</button>
+										<button style="display: <?= $MCO->MCO_STATUS_SUCCESS == 0 ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยื่นยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $MCO->RM_ID) ?>')};">ย้ายออก</button>
 										<button type="submit" class="btn btn-sm btn-primary">แก้ไข</button>
 									</div>
 								</div>

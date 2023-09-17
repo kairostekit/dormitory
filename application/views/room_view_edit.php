@@ -108,7 +108,7 @@
 							<div class="field item form-group">
 								<label class="col-form-label col-md-3 col-sm-3  label-align">รายเอียด</label>
 								<div class="col-md-6 col-sm-6">
-									<textarea disabled name="RT_DETAILS" class="form-control" id="" cols="30" rows="5"></textarea>
+									<textarea  name="RM_DETAILS" class="form-control"  cols="30" rows="5"><?= $room->RM_DETAILS ?></textarea>
 
 								</div>
 							</div>
@@ -117,6 +117,7 @@
 									<div class="col-md-6 offset-md-3">
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
 										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/room_update_delete/' . $room->RM_ID) ?>')};">ลบข้อมูล</button>
+										<button style="display: <?= $room->RM_MCO_ID != NULL ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยื่นยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $room->RM_ID) ?>')};">ย้ายออก</button>
 										<button type="submit" class="btn btn-sm btn-primary">แก้ไขข้อมูล</button>
 									</div>
 								</div>

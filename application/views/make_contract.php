@@ -54,28 +54,49 @@
 									$urlli = base_url('home/make_contract_update_RESERVE_PAY/' . $ii->MCO_ID);
 									$urllix = base_url('home/make_contract_update_MOVEIN_PAY/' . $ii->MCO_ID);
 								?>
-								<tr>
-									<th scope="row"><?= $key + 1 ?></th>
-									<td><?= sprintf("MC-%04d", $ii->MCO_ID) ?> </td>
-									<td><?= $ii->MCO_USER_NAME ?> </td>
-									<td><?= $ii->MCO_USER_PHONE ?> </td>
-									<td><?= $ii->MCO_RM_NAME . '/' . $ii->MCO_RM_NUMBER ?> </td>
-									<td><?= $ii->MCO_ROOM_TYPE_NAME ?> </td>
-									<td><?= $ii->MCO_ROOMRENT ?> </td>
+									<tr>
+										<th scope="row"><?= $key + 1 ?></th>
+										<td><?= sprintf("MC-%04d", $ii->MCO_ID) ?> </td>
+										<td><?= $ii->MCO_USER_NAME ?> </td>
+										<td><?= $ii->MCO_USER_PHONE ?> </td>
+										<td><?= $ii->MCO_RM_NAME . '/' . $ii->MCO_RM_NUMBER ?> </td>
+										<td><?= $ii->MCO_ROOM_TYPE_NAME ?> </td>
+										<td><?= $ii->MCO_ROOMRENT ?> </td>
 
-									<td> <?= $ii->MCO_RESERVE ?> <?= $ii->MCO_RESERVE_PAY == 1 ? "(จ่ายแล้ว)" : "<a href='{$urlli}'>(ยังไม่จ่าย)</a>"  ?></td>
-									<td><?= $ii->MCO_MOVEIN ?> <?= $ii->MCO_MOVEIN_PAY == 1 ? "(จ่ายแล้ว)" : "<a href='{$urllix}'>(ยังไม่จ่าย)</a>"  ?></td>
-									<td> <?= $ii->MCO_DEPOSIT ?></td>
-									<td> <?= $ii->MCO_STATUS_CANCEL == 0 ? "<span class='badge  badge-primary'>ปกติ</span>" : "<span class='badge badge-danger'>ถูกยกเลิก</span>" ?> </td>
-									<td><?= $ii->MCO_DATE == null ? "-" : DateThai($ii->MCO_DATE)   ?> </td>
-									<td><?= $ii->MCO_MOVEIN_DATE == null ? "-" : DateThai($ii->MCO_MOVEIN_DATE)   ?> </td>
-									<td><?= $ii->MCO_DETAILS ?> </td>
-									<td>
-										<a class="btn btn-sm btn-warning" href="<?= base_url('home/make_contract_view_edit/' . $ii->MCO_ID) ?>">รายละเอียด</a>
-										<a class="btn btn-sm btn-outline-primary" target="_blank" href="<?= base_url('home/make_contract_view_print/' . $ii->MCO_ID) ?>">พิมพ์</a>
-									</td>
-								</tr>
-							<?php endforeach; ?>
+										<td>
+											<p style="margin: 0px;">
+												<?= $ii->MCO_RESERVE ?>
+											</p>
+											<?= $ii->MCO_RESERVE_PAY == 1 ? "(จ่ายแล้ว)" : "<a class='text-danger' href='{$urlli}'>(ยังไม่จ่าย)</a>"  ?>
+										</td>
+										<td>
+											<p style="margin: 0px;"><?= $ii->MCO_MOVEIN ?></p>
+											<?= $ii->MCO_MOVEIN_PAY == 1 ? "(จ่ายแล้ว)" : "<a class='text-danger' href='{$urllix}'>(ยังไม่จ่าย)</a>"  ?>
+										</td>
+										<td> <?= $ii->MCO_DEPOSIT ?></td>
+										<td>
+											<?php if ($ii->MCO_STATUS_MOVE == 0 && $ii->MCO_STATUS_CANCEL == 0) : ?>
+												<span class='badge  badge-primary'>ปกติ</span>
+											<?php elseif ($ii->MCO_STATUS_MOVE == 0 && $ii->MCO_STATUS_CANCEL == 1) : ?>
+												<span class='badge badge-danger'>ถูกยกเลิก</span>
+											<?php elseif ($ii->MCO_STATUS_MOVE == 1 && $ii->MCO_STATUS_CANCEL == 0) : ?>
+												<span class='badge badge-warning'>ย้ายออก</span>
+											<?php endif; ?>
+						
+										</td>
+										<td><?= $ii->MCO_DATE == null ? "-" : DateThai($ii->MCO_DATE)   ?> </td>
+										<td><?= $ii->MCO_MOVEIN_DATE == null ? "-" : DateThai($ii->MCO_MOVEIN_DATE)   ?> </td>
+										<td><?= $ii->MCO_DETAILS ?> </td>
+										<td>
+											<?php if ($ii->MCO_STATUS_SUCCESS == 0 ) :  ?>
+												<a class="btn btn-sm btn-warning" href="<?= base_url('home/make_contract_view_edit/' . $ii->MCO_ID) ?>">รายละเอียด</a>
+												<!-- <a class="btn btn-sm btn-outline-primary" target="_blank" href="<?= base_url('home/make_contract_view_print/' . $ii->MCO_ID) ?>">พิมพ์</a> -->
+											<?php endif; ?>
+											<a class="btn btn-sm btn-outline-primary" target="_blank" href="<?= base_url('home/make_contract_view_print/' . $ii->MCO_ID) ?>">พิมพ์</a>
+
+										</td>
+									</tr>
+								<?php endforeach; ?>
 							</tbody>
 
 						</table>
