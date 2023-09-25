@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+
+
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<!-- Meta, title, CSS, favicons, etc. -->
@@ -51,7 +54,7 @@
 
 	<script>
 		$(document).ready(function() {
-			$.fn.dataTable.ext.errMode = 'none';
+			// $.fn.dataTable.ext.errMode = 'none';
 
 			new DataTable('table', {
 				"language": {

@@ -12,7 +12,7 @@
 <!-- jQuery -->
 
 
-<script src="<?= base_url('public/') ?>build/js/custom.js"></script>
+<script src="<?= base_url('public/') ?>build/js/custom.min.js"></script>
 
 </body>
 

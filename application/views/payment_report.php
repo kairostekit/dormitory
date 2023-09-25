@@ -8,6 +8,8 @@
 		window.print();
 
 		document.body.innerHTML = originalContents;
+
+		location.reload();
 	}
 </script>
 <!-- <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script> -->
@@ -39,16 +41,22 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div class="pull-left">
-								<button class="btn btn-md btn-primary" onclick="printDiv('section-to-print') ">พิมพ์รายงาน PDF</button>
-								<button class="btn btn-md btn-primary" onclick="ExportToExcel('table-id','xlsx')">ออกรายงาน Excel</button>
+								<button class="btn btn-md btn-primary"
+									onclick="printDiv('section-to-print') ">พิมพ์รายงาน PDF</button>
+								<button class="btn btn-md btn-primary"
+									onclick="ExportToExcel('table-id','xlsx')">ออกรายงาน Excel</button>
 
 							</div>
 							<div class="pull-right">
 								<form id="form-selsect" action="<?= base_url("home/payment_report/") ?>" method="get">
 									<select name="MONTH_ID" class="form-control" onchange="$('#form-selsect').submit()">
-										<option <?= $MONTH_ID ==  '-1' ? "selected" : "" ?> value="-1">---เลือกเดือน---</option>
-										<?php foreach ($MONTH_ALL as $key => $item) : ?>
-											<option <?= $MONTH_ID ==  $item->MONTH_ID ? "selected" : "" ?> value="<?= $item->MONTH_ID ?>">---<?= $item->MONTH_NAME ?>---</option>
+										<option <?= $MONTH_ID == '-1' ? "selected" : "" ?> value="-1">---เลือกเดือน---
+										</option>
+										<?php foreach ($MONTH_ALL as $key => $item): ?>
+											<option <?= $MONTH_ID == $item->MONTH_ID ? "selected" : "" ?>
+												value="<?= $item->MONTH_ID ?>">---
+												<?= $item->MONTH_NAME ?>---
+											</option>
 										<?php endforeach; ?>
 
 									</select>
@@ -82,29 +90,46 @@
 							<tbody>
 								<?php
 
-								$temp_IRC_ID = '';
+								$temp_IRC_ID = null;
 								$icount = 1;
 								$sum_to = 0;
-								foreach ($Issue_GET as $key => $ii) :
-									$sum_to += $ii->IRC_TOTAL;
-									if ($temp_IRC_ID !=  $ii->IRC_ID) :
-										$temp_IRC_ID  =  $ii->IRC_ID;
+								foreach ($Issue_GET as $key => $ii): ?>
+
+
+									<?php
+									if ($temp_IRC_ID != $ii->IRC_ID):
+										$temp_IRC_ID = $ii->IRC_ID;
 										$icount = 1;
-								?>
+										$sum_to += $ii->IRC_TOTAL;
+
+										?>
+
 										<tr class="table-secondary">
-											<td><?= sprintf("IRC-%010d", $ii->IRC_ID) ?> </td>
+											<td>
+												<?= sprintf("IRC-%010d", $ii->IRC_ID) ?>
+											</td>
 											<td></td>
-											<td><?= $ii->USER_NAME ?> </td>
-											<td><?= $ii->USER_PHONE ?> </td>
-											<td><?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?> </td>
-											<td><?= $ii->RT_NAME ?> </td>
-											<td><?= $ii->IRC_ROOMRENT ?> </td>
+											<td>
+												<?= $ii->USER_NAME ?>
+											</td>
+											<td>
+												<?= $ii->USER_PHONE ?>
+											</td>
+											<td>
+												<?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?>
+											</td>
+											<td>
+												<?= $ii->RT_NAME ?>
+											</td>
+											<td>
+												<?= $ii->IRC_ROOMRENT ?>
+											</td>
 											<td>
 												<?php
 												$msge = '';
-												if ($ii->IRC_STATUS_CANCEL == 1) :
+												if ($ii->IRC_STATUS_CANCEL == 1):
 													$msge .= "ถูกยกเลิกบิล - ";
-												else :
+												else:
 													$msge .= "";
 												endif;
 
@@ -122,17 +147,32 @@
 
 												?>
 											</td>
-											<td><?= DateThai($ii->IRC_STAMP)  ?> </td>
-											<td><?= (int)$ii->IRC_YEAR + 543 ?> </td>
-											<td><?= $ii->MONTH_NAME  ?> </td>
-											<td class="text-right"><?= $ii->IRC_TOTAL  ?> </td>
+											<td>
+												<?= DateThai($ii->IRC_STAMP) ?>
+											</td>
+											<td>
+												<?= (int) $ii->IRC_YEAR + 543 ?>
+											</td>
+											<td>
+												<?= $ii->MONTH_NAME ?>
+											</td>
+											<td class="text-right">
+												<?= $ii->IRC_TOTAL ?>
+											</td>
 										</tr>
 									<?php endif; ?>
 
-									<tr>
+									<?php if ($temp_IRC_ID == $ii->IRC_ID): ?>
+
+									<?php endif; ?>
+
+									<!-- <tr>
 										<td></td>
 
-										<td scope="row"><?= $icount++ ?>.<?= $ii->IRD_LISTNAME ?></td>
+										<td scope="row">
+											<?= $icount++ ?>.
+											<?= $ii->IRD_LISTNAME ?>
+										</td>
 										<td></td>
 										<td></td>
 										<td></td>
@@ -142,14 +182,19 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td class="text-right"><?= $ii->IRD_UNITSUM ?></td>
-									</tr>
-								<?php
+										<td class="text-right">
+											<?= $ii->IRD_UNITSUM ?>
+										</td>
+									</tr> -->
+									<?php
 								endforeach; ?>
 							</tbody>
 							<tfoot>
 								<tr>
-									<th class="text-right" colspan="12">รวมยอด : <?= $sum_to  ?> (<?= ConvertNume($sum_to)  ?>) </th>
+									<th class="text-right" colspan="12">รวมยอด :
+										<?= $sum_to ?> (
+										<?= ConvertNume($sum_to) ?>)
+									</th>
 								</tr>
 							</tfoot>
 						</table>

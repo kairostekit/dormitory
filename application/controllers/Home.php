@@ -29,6 +29,69 @@ class Home extends CI_Controller
 		$Make_contract_models = new Make_contract_models();
 		$Account_models = new Account_models();
 
+
+		$ข้อมูลห้อง = $Room->QueryResources([
+			"WHERE" => [
+				$Room->TB_NAME() => [
+					"RM_STATUS" => 1,
+				]
+			]
+		]);
+
+		$temp = array();
+		foreach ($ข้อมูลห้อง as $key => $item):
+
+			$obj = new stdClass();
+			$obj->label = $item->RM_NAME;
+			$ข้อมูลเดือน = $month_tbl_models->QueryResources([]);
+			$tdaamp = array();
+			foreach ($ข้อมูลเดือน as $mk => $mi):
+				$counst_M = count($Make_contract_models->QueryResources([
+					"WHERE" => [
+						$Make_contract_models->TB_NAME() => [
+							"MONTH_ID" => $mi->MONTH_ID,
+						]
+					]
+				]));
+				array_push($tdaamp, $counst_M);
+			endforeach;
+
+			$obj->data = $tdaamp;
+			array_push($temp, $obj);
+		endforeach;
+
+
+		$จำนวนทำสัญญา = $temp;
+
+
+
+
+		$ข้อมูลเดือน = $month_tbl_models->QueryResources([]);
+		$tdaamp = array();
+		foreach ($ข้อมูลเดือน as $mk => $mi):
+			$ยอดทั้งหมด = 0;
+
+			$บิล = $Issue_receipt_models->QueryResources([
+				"WHERE" => [
+					$Issue_receipt_models->TB_NAME() => [
+						"IRC_STATUS_CANCEL" => 0,
+						"IRC_MONTH_ID " => $mi->MONTH_ID,
+					]
+				]
+
+			]);
+
+			foreach ($บิล as $key => $value) {
+				$ยอดทั้งหมด += $value->IRC_TOTAL;
+			}
+
+			array_push($tdaamp, $ยอดทั้งหมด);
+		endforeach;
+		$ยอดทั้งหมดบิล = $tdaamp;
+		// echo json_encode($tdaamp);
+		// return;
+
+
 		$ย้ายเข้า = $Make_contract_models->QueryResources([
 			"WHERE" => [
 				$Make_contract_models->TB_NAME() => [
@@ -46,7 +109,7 @@ class Home extends CI_Controller
 
 		]);
 
-		$จำนวนบิล  = $Issue_receipt_models->QueryResources([
+		$จำนวนบิล = $Issue_receipt_models->QueryResources([
 			"WHERE" => [
 				$Issue_receipt_models->TB_NAME() => [
 					"IRC_STATUS_CANCEL" => 0,
@@ -55,7 +118,7 @@ class Home extends CI_Controller
 
 		]);
 
-		$จำนวนบิลชำระ  = $Issue_receipt_models->QueryResources([
+		$จำนวนบิลชำระ = $Issue_receipt_models->QueryResources([
 			"WHERE" => [
 				$Issue_receipt_models->TB_NAME() => [
 					"IRC_STATUS_CANCEL" => 0,
@@ -65,7 +128,7 @@ class Home extends CI_Controller
 
 		]);
 
-		$จำนวนบิลค้างชำระ  = $Issue_receipt_models->QueryResources([
+		$จำนวนบิลค้างชำระ = $Issue_receipt_models->QueryResources([
 			"WHERE" => [
 				$Issue_receipt_models->TB_NAME() => [
 					"IRC_STATUS_CANCEL" => 0,
@@ -76,7 +139,7 @@ class Home extends CI_Controller
 		]);
 
 
-		$จำนวนลูกค้า  = $Users->QueryResources([
+		$จำนวนลูกค้า = $Users->QueryResources([
 			"WHERE" => [
 				$Users->TB_NAME() => [
 					"USER_STATUS" => 1,
@@ -85,7 +148,7 @@ class Home extends CI_Controller
 
 		]);
 
-		$จำนวนห้อง  = $Room->QueryResources([
+		$จำนวนห้อง = $Room->QueryResources([
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_STATUS" => 1,
@@ -93,7 +156,7 @@ class Home extends CI_Controller
 			]
 		]);
 
-		$จำนวนห้องว่าง  = $Room->QueryResources([
+		$จำนวนห้องว่าง = $Room->QueryResources([
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => 1,
@@ -102,7 +165,7 @@ class Home extends CI_Controller
 			]
 		]);
 
-		$จำนวนห้องไม่ว่าง  = $Room->QueryResources([
+		$จำนวนห้องไม่ว่าง = $Room->QueryResources([
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => 0,
@@ -111,7 +174,7 @@ class Home extends CI_Controller
 			]
 		]);
 
-		$จำนวนห้องถูกจอง  = $Room->QueryResources([
+		$จำนวนห้องถูกจอง = $Room->QueryResources([
 			"WHERE" => [
 				$Room->TB_NAME() => [
 					"RM_USE" => "S",
@@ -132,15 +195,22 @@ class Home extends CI_Controller
 			"จำนวนบิล" => count($จำนวนบิล),
 			"ย้ายเข้า" => count($ย้ายเข้า),
 			"รอย้ายเข้า" => count($รอย้ายเข้า),
+			"จำนวนทำสัญญา" => $จำนวนทำสัญญา,
+			"ยอดทั้งหมดบิล" => $ยอดทั้งหมดบิล
 		];
 
-		// echo json_encode($data);
+
+
+
+
+
+
 		$Load->template("dashboard", $data);
 	}
 
 
 
-	function user_info(): void
+	function user_info()
 	{
 		$data = array();
 
@@ -293,7 +363,7 @@ class Home extends CI_Controller
 		$USER_GET = new Users_info_models();
 		$check = $USER_GET->UpdateResources([
 			"WHERE" => [
-				"USER_ID" =>  $USER_ID
+				"USER_ID" => $USER_ID
 			],
 			"DATA" => [
 				"USER_STATUS" => 0,
@@ -314,7 +384,7 @@ class Home extends CI_Controller
 	{
 		$user_info = new Users_info_models();
 
-		$USER_ID  = null;
+		$USER_ID = null;
 
 		if (isset($USER_IDX)) {
 			$USER_ID = $USER_IDX;
@@ -341,7 +411,7 @@ class Home extends CI_Controller
 		echo json_encode($RES_D);
 	}
 
-	function admin(): void
+	function admin()
 	{
 		$data = array();
 
@@ -406,7 +476,7 @@ class Home extends CI_Controller
 		$ACC = new Account_models();
 		$check = $ACC->UpdateResources([
 			"WHERE" => [
-				"ACC_ID" =>  $ACC_ID
+				"ACC_ID" => $ACC_ID
 			],
 			"DATA" => [
 				"ACC_NAME" => $ACC_NAME,
@@ -484,7 +554,7 @@ class Home extends CI_Controller
 		$ACC = new Account_models();
 		$check = $ACC->UpdateResources([
 			"WHERE" => [
-				"ACC_ID" =>  $ACC_ID
+				"ACC_ID" => $ACC_ID
 			],
 			"DATA" => [
 				"ACC_STATUS" => 0,
@@ -609,11 +679,13 @@ class Home extends CI_Controller
 			return;
 		}
 
-		if ($Room->InsertResources([
-			"RM_NAME" => $RM_NAME,
-			"RT_ID" => $RT_ID,
-			"RM_NUMBER" => $RM_NUMBER,
-		])) {
+		if (
+			$Room->InsertResources([
+				"RM_NAME" => $RM_NAME,
+				"RT_ID" => $RT_ID,
+				"RM_NUMBER" => $RM_NUMBER,
+			])
+		) {
 			$url = base_url('home/room');
 			echo "<script>alert('เพิ่มข้อมูลสำเร็จ');location.assign('$url')</script>";
 		} else {
@@ -648,7 +720,7 @@ class Home extends CI_Controller
 
 		$check = $Room->UpdateResources([
 			"WHERE" => [
-				"RM_ID" =>  $RM_ID
+				"RM_ID" => $RM_ID
 			],
 			"DATA" => $this->input->post(),
 		]);
@@ -665,7 +737,7 @@ class Home extends CI_Controller
 		$Room_ = new Room_models();
 		$check = $Room_->UpdateResources([
 			"WHERE" => [
-				"RM_ID" =>  $RM_ID
+				"RM_ID" => $RM_ID
 			],
 			"DATA" => [
 				"RM_STATUS" => 0,
@@ -685,7 +757,7 @@ class Home extends CI_Controller
 		$serach = array();
 
 		$Room = new Room_models();
-		$RM_ID  = null;
+		$RM_ID = null;
 
 
 
@@ -698,20 +770,25 @@ class Home extends CI_Controller
 
 		$DATA = $Room->QueryResources([
 			"WHERE" => [
-				"RM_ID" => $RM_ID
+				$Room::TB_NAME() => [
+					"RM_ID" => $RM_ID
+				]
 			],
 			"ONE_ROW" => TRUE,
 		]);
 
+		// echo json_encode($DATA);
+		// return;
 
 
 
-		$USER_ID  = $DATA->USER_ID;
-		$RM_MCO_ID  = $DATA->RM_MCO_ID;
+
+		$USER_ID = $DATA->USER_ID;
+		$RM_MCO_ID = $DATA->RM_MCO_ID;
 		$USER = new Users_info_models();
 		$USER->UpdateResources([
 			"WHERE" => [
-				"USER_ID" =>  $USER_ID
+				"USER_ID" => $USER_ID
 			],
 			"DATA" => [
 				"USER_RM_ID" => NULL,
@@ -721,7 +798,7 @@ class Home extends CI_Controller
 		$MCO = new Make_contract_models();
 		$MCO->UpdateResources([
 			"WHERE" => [
-				"MCO_ID" =>  $RM_MCO_ID
+				"MCO_ID" => $RM_MCO_ID
 			],
 			"DATA" => [
 				"MCO_STATUS_SUCCESS" => 1,
@@ -731,11 +808,11 @@ class Home extends CI_Controller
 
 		$check = $Room->UpdateResources([
 			"WHERE" => [
-				"RM_ID" =>  $RM_ID
+				"RM_ID" => $RM_ID
 			],
 			"DATA" => [
 				"RM_STATUS" => 1,
-				"USER_ID" =>  NULL,
+				"USER_ID" => NULL,
 				"RM_MOVEINDATE" => NULL,
 				"RM_USE" => 1
 			],
@@ -785,7 +862,7 @@ class Home extends CI_Controller
 
 		$check = $Make_contract->UpdateResources([
 			"WHERE" => [
-				"MCO_ID" =>  $DATAR->RM_MCO_ID
+				"MCO_ID" => $DATAR->RM_MCO_ID
 			],
 			"DATA" => [
 				"MCO_MOVEIN_PAY" => 1,
@@ -795,7 +872,7 @@ class Home extends CI_Controller
 		$Room->UpdateResources(
 			[
 				"WHERE" => [
-					"RM_ID" =>  $RM_ID
+					"RM_ID" => $RM_ID
 				],
 				"DATA" => [
 					"RM_USE" => 0,
@@ -819,7 +896,7 @@ class Home extends CI_Controller
 		$serach = array();
 
 		$Room = new Room_models();
-		$RM_ID  = null;
+		$RM_ID = null;
 
 		if (isset($RM_IDX)) {
 			$RM_ID = $RM_IDX;
@@ -961,7 +1038,7 @@ class Home extends CI_Controller
 		$Room_type = new Room_type_models();
 		$check = $Room_type->UpdateResources([
 			"WHERE" => [
-				"RT_ID" =>  $RT_ID
+				"RT_ID" => $RT_ID
 			],
 			"DATA" => $this->input->post(),
 		]);
@@ -979,7 +1056,7 @@ class Home extends CI_Controller
 		$Room_type_ = new Room_type_models();
 		$check = $Room_type_->UpdateResources([
 			"WHERE" => [
-				"RT_ID" =>  $RT_ID
+				"RT_ID" => $RT_ID
 			],
 			"DATA" => [
 				"RT_STATUS" => 0,
@@ -1000,7 +1077,7 @@ class Home extends CI_Controller
 		$serach = array();
 
 		$Room_type = new Room_type_models();
-		$RT_ID  = null;
+		$RT_ID = null;
 
 		if (isset($RT_IDx)) {
 			$RT_ID = $RT_IDx;
@@ -1177,7 +1254,7 @@ class Home extends CI_Controller
 			"WHERE" => [
 				$Issue_receipt_models->TB_NAME() => [
 					"IRC_STATUS" => 1,
-					"IRC_ID" =>  $IRC_ID
+					"IRC_ID" => $IRC_ID
 				]
 			],
 			"JOIN" => [
@@ -1208,7 +1285,7 @@ class Home extends CI_Controller
 			"ONE_ROW" => TRUE,
 		]);
 
-		$IRC_ID   = $data['Issue_GET']->IRC_ID;
+		$IRC_ID = $data['Issue_GET']->IRC_ID;
 
 
 		$RES = new Room_models();
@@ -1243,7 +1320,7 @@ class Home extends CI_Controller
 		$data['receipt_details'] = $Issue_receipt_details_models->QueryResources([
 			"WHERE" => [
 				$Issue_receipt_details_models->TB_NAME() => [
-					"IRC_ID  " =>  $IRC_ID
+					"IRC_ID  " => $IRC_ID
 				]
 			],
 			"TYPE_RESULT" => "object",
@@ -1286,7 +1363,7 @@ class Home extends CI_Controller
 			"WHERE" => [
 				$Issue_receipt_models->TB_NAME() => [
 					"IRC_STATUS" => 1,
-					"IRC_ID" =>  $IRC_ID
+					"IRC_ID" => $IRC_ID
 				]
 			],
 			"JOIN" => [
@@ -1317,7 +1394,7 @@ class Home extends CI_Controller
 			"ONE_ROW" => TRUE,
 		]);
 
-		$IRC_ID   = $data['Issue_GET']->IRC_ID;
+		$IRC_ID = $data['Issue_GET']->IRC_ID;
 
 
 		$RES = new Room_models();
@@ -1352,7 +1429,7 @@ class Home extends CI_Controller
 		$data['receipt_details'] = $Issue_receipt_details_models->QueryResources([
 			"WHERE" => [
 				$Issue_receipt_details_models->TB_NAME() => [
-					"IRC_ID  " =>  $IRC_ID
+					"IRC_ID  " => $IRC_ID
 				]
 			],
 			"TYPE_RESULT" => "object",
@@ -1394,12 +1471,12 @@ class Home extends CI_Controller
 			"IRC_TOTAL" => array_sum($IRD_UNITSUM) + $IRC_ROOMRENT,
 			"IRC_ROOMRENT" => $IRC_ROOMRENT,
 			"IRC_WATER" => $IRD_UNITSUM[0],
-			"IRC_ELECTRICCTY" =>  $IRD_UNITSUM[1],
+			"IRC_ELECTRICCTY" => $IRD_UNITSUM[1],
 			"IRC_YEAR" => date("Y"),
 			"IRC_MONTH_ID" => $IRC_MONTH_ID,
 		]);
 
-		foreach ($IRD_LISTNAME as $key => $item) :
+		foreach ($IRD_LISTNAME as $key => $item):
 			$Issue_receipt_details_models->InsertResources([
 				"IRC_ID" => $LasID,
 				"IRD_LISTNAME" => $item,
@@ -1507,7 +1584,7 @@ class Home extends CI_Controller
 
 
 		$Room = new Room_models();
-		$RM_ID  = null;
+		$RM_ID = null;
 
 		if (isset($RM_IDx)) {
 			$RM_ID = $RM_IDx;
@@ -1726,6 +1803,17 @@ class Home extends CI_Controller
 		$LastID = $make_contract->InsertResources($this->input->post());
 
 
+		$make_contract->UpdateResources([
+			"WHERE" => [
+				"MCO_ID" => $LastID
+			],
+			"DATA" => [
+				"MONTH_ID " => date('m'),
+			],
+		]);
+
+
+
 
 		$ROOM = new Room_models();
 		$ROOM->UpdateResources([
@@ -1764,7 +1852,7 @@ class Home extends CI_Controller
 
 		$user_info = new Make_contract_models();
 
-		$MCO_ID  = null;
+		$MCO_ID = null;
 		if (isset($MCO_IDX)) {
 			$MCO_ID = $MCO_IDX;
 		}
@@ -1779,7 +1867,7 @@ class Home extends CI_Controller
 				"RM_MCO_ID" => $MCO_ID
 			],
 			"DATA" => [
-				"RM_USE" => 1,
+				"RM_USE" => 0,
 				"USER_ID" => NULL,
 				"RM_MOVEINDATE" => NULL,
 				"RM_MCO_ID" => NULL
@@ -1820,7 +1908,8 @@ class Home extends CI_Controller
 		$Make_contract = new Make_contract_models();
 		$check = $Make_contract->UpdateResources([
 			"WHERE" => [
-				"MCO_ID" =>  $MCO_ID
+				
+				"MCO_ID" => $MCO_ID
 			],
 			"DATA" => [
 				// "RT_STATUS" => 0,
@@ -1838,7 +1927,7 @@ class Home extends CI_Controller
 
 	public function make_contract_view_print($MCO_IDX)
 	{
-		$MCO_ID  = null;
+		$MCO_ID = null;
 
 		if (isset($MCO_IDX)) {
 			$MCO_ID = $MCO_IDX;
@@ -1892,7 +1981,7 @@ class Home extends CI_Controller
 		$Make_contract = new Make_contract_models();
 		$check = $Make_contract->UpdateResources([
 			"WHERE" => [
-				"MCO_ID" =>  $MCO_ID
+				"MCO_ID" => $MCO_ID
 			],
 			"DATA" => [
 				// "RT_STATUS" => 0,
@@ -1923,7 +2012,7 @@ class Home extends CI_Controller
 
 		$check = $Make_contract->UpdateResources([
 			"WHERE" => [
-				"MCO_ID" =>  $MCO_ID
+				"MCO_ID" => $MCO_ID
 			],
 			"DATA" => [
 				"MCO_MOVEIN_PAY" => 1,
@@ -1932,7 +2021,7 @@ class Home extends CI_Controller
 		$Room->UpdateResources(
 			[
 				"WHERE" => [
-					"RM_MCO_ID" =>  $MCO_ID
+					"RM_MCO_ID" => $MCO_ID
 				],
 				"DATA" => [
 					"RM_USE" => 0,
@@ -1963,7 +2052,7 @@ class Home extends CI_Controller
 		$month_tbl_models = new month_tbl_models();
 
 
-		$MONTH_ID  = null;
+		$MONTH_ID = null;
 		if (isset($MONTH_IDX)) {
 			$MONTH_ID = $MONTH_IDX;
 		}
@@ -1987,7 +2076,7 @@ class Home extends CI_Controller
 		if ($MONTH_ID != null) {
 
 			if ($MONTH_ID != "-1") {
-				$WHERE[$Issue_receipt_models->TB_NAME()]['IRC_MONTH_ID'] =  $MONTH_ID;
+				$WHERE[$Issue_receipt_models->TB_NAME()]['IRC_MONTH_ID'] = $MONTH_ID;
 			}
 		}
 
