@@ -35,7 +35,7 @@
                             <td><?= $ii->USER_NAME ?> </td>
                             <td><?= $ii->USER_PHONE ?></td>
                             <td><?= DateThai($ii->USER_STAMP) ?></td>
-                            <td><?= $ii->RM_NAME."".$ii->RM_NUMBER ?> </td>
+                            <td><?= $ii->RM_NAME?> </td>
                             <td><?= $ii->USER_DETAILS ?> </td>
                             <td><a class="btn btn-sm btn-warning" href="<?= base_url('home/user_info_view_edit/' . $ii->USER_ID) ?>">แก้ไข</a></td>
                         </tr>

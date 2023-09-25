@@ -33,8 +33,8 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>ชื่อห้อง</th>
-									<th>เลขที่ห้อง</th>
+									<th>เลขห้อง</th>
+									<!-- <th>เลขที่ห้อง</th> -->
 									<th>ประเภทห้อง</th>
 									<th>ค่าห้อง</th>
 									<th>ขนาดห้อง</th>
@@ -54,13 +54,13 @@
 								<tr>
 									<th scope="row"><?= $key + 1 ?></th>
 									<td><?= $ii->RM_NAME ?> </td>
-									<td><?= $ii->RM_NUMBER ?> </td>
+									<!-- <td><?= $ii->RM_NUMBER ?> </td> -->
 									<td><?= $ii->RT_NAME ?> </td>
 									<td><?= $ii->RT_ROOMRENT ?> </td>
 									<td><?= $ii->RT_ROOMSIZE ?> </td>
 									<td><?= $ii->RT_WATER . '/' . $ii->RT_ELECTRICCTY ?> </td>
 									<td><?= $ii->RM_DETAILS ?> </td>
-									<td><?= $ii->RM_USE == 0 ? "<span class='badge badge-danger'>ไม่ว่าง</span>" : "<span class='badge  badge-primary'>ห้องว่าง</span>"?> </td>
+									<td><?= $ii->RM_USE == '0' ? "<span class='badge badge-danger'>ไม่ว่าง</span>" : "<span class='badge  badge-primary'>ห้องว่าง</span>"?> </td>
 									<td><?= $ii->USER_NAME == null ? "-" : $ii->USER_NAME  ?> </td>
 									<td><?= $ii->RM_MOVEINDATE == null ? "-" : DateThai($ii->RM_MOVEINDATE)   ?> </td>
 									<td>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2023 at 08:36 AM
+-- Generation Time: Sep 25, 2023 at 04:50 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -64,7 +64,8 @@ CREATE TABLE `issue_receipt` (
   `IRC_PAYMENTFORMAT` varchar(5) DEFAULT NULL COMMENT '1 โอน 2 เงินสด',
   `IRC_PAYMENT_OK` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'จ่าย 1 ไม่จ่าย 0',
   `IRC_YEAR` year(4) NOT NULL COMMENT 'บินของปี',
-  `IRC_MONTH_ID` int(11) NOT NULL COMMENT 'เดือนของบิล'
+  `IRC_MONTH_ID` int(11) NOT NULL COMMENT 'เดือนของบิล',
+  `IRC_PAYMENT_OK_DATE` date DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -113,7 +114,8 @@ CREATE TABLE `make_contract` (
   `MCO_ROOMRENT` decimal(10,2) NOT NULL,
   `MCO_RM_NAME` varchar(100) NOT NULL,
   `MCO_RM_NUMBER` varchar(100) NOT NULL,
-  `MCO_STATUS_MOVE` varchar(1) DEFAULT '0'
+  `MCO_STATUS_MOVE` varchar(1) DEFAULT '0',
+  `MONTH_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -165,13 +167,6 @@ CREATE TABLE `room` (
   `RM_MCO_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `room`
---
-
-INSERT INTO `room` (`RM_ID`, `RM_NUMBER`, `RM_STATUS`, `RM_USE`, `RT_ID`, `RM_NAME`, `USER_ID`, `RM_MOVEINDATE`, `RM_DETAILS`, `RM_MCO_ID`) VALUES
-(1, '101', '1', '1', 1, 'Manor', NULL, NULL, 'เตียงเดี่ยว 6 ฟุต, เครื่องฟอกอากาศ, พัดลม, Wifi Router ส่วนตัว,แอร์, ทีวี, ตู้เย็น, กล่องจาน, เครื่องทำน้ำอุ่น, เฟอร์นิเจอร์ครบ)', NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -200,7 +195,7 @@ CREATE TABLE `room_type` (
 --
 
 INSERT INTO `room_type` (`RT_ID`, `RT_NAME`, `RT_STATUS`, `RT_STAMP`, `RT_DEPOSIT`, `RT_RESERVE`, `RT_MOVEIN`, `RT_WATER`, `RT_ELECTRICCTY`, `RT_DETAILS`, `RT_ROOMRENT`, `RT_ROOMSIZE`, `RT_ROOMSIZE_D`, `RT_CONDITIONS`) VALUES
-(1, 'Manor', '1', '2023-09-16 19:26:45', '8000.00', '3000.00', '5000.00', '10.00', '8.00', 'แอร์, ทีวี, ตู้เย็น, กล่องจาน, เครื่องทำน้ำอุ่น, เฟอร์นิเจอร์, เตียงคู่', '4000.00', '29.00', '4x5', 'คืนตอนหมดสัญญา โอนเงินคืนหลังจากคืน ห้อง 2 สัปดาห์'),
+(1, 'แมเนอร์(Manor)', '1', '2023-09-17 16:58:37', '8000.00', '3000.00', '5000.00', '10.00', '8.00', 'แอร์, ทีวี, ตู้เย็น, กล่องจาน, เครื่องทำน้ำอุ่น, เฟอร์นิเจอร์, เตียงคู่', '4000.00', '29.00', '4x5', 'คืนตอนหมดสัญญา โอนเงินคืนหลังจากคืน ห้อง 2 สัปดาห์'),
 (2, 'แมเนอร์มอล (Manormal) เช่า 5,500', '1', '2023-09-16 19:30:28', '10000.00', '5000.00', '5000.00', '10.00', '8.00', 'เตียงเดี่ยว 5 ฟุต, เครื่องฟอกอากาศ, พัดลม, Wifi Router ส่วนตัว,แอร์, ทีวี, ตู้เย็น, กล่องจาน, เครื่องทำน้ำอุ่น, เฟอร์นิเจอร์ครบ)', '5500.00', '39.00', '5X8', 'คืนตอนหมดสัญญา โอนเงินคืนหลังจากคืน ห้อง 2 สัปดาห์'),
 (3, 'แมเนอร์มอล (Manormal) เช่า 5,800', '1', '2023-09-16 19:30:28', '10000.00', '5000.00', '5000.00', '10.00', '8.00', 'เตียงเดี่ยว 6 ฟุต, เครื่องฟอกอากาศ, พัดลม, Wifi Router ส่วนตัว,แอร์, ทีวี, ตู้เย็น, กล่องจาน, เครื่องทำน้ำอุ่น, เฟอร์นิเจอร์ครบ)', '5800.00', '48.00', '5X8', 'คืนตอนหมดสัญญา โอนเงินคืนหลังจากคืน ห้อง 2 สัปดาห์'),
 (4, 'ร้านค้ารอบหอพัก', '1', '2023-09-16 19:34:14', '10000.00', '5000.00', '5000.00', '10.00', '8.00', '-', '4500.00', '56.00', '4X8', 'คืนตอนหมดสัญญา โอนเงินคืนหลังจากคืน ห้อง 2 สัปดาห์');
@@ -256,7 +251,8 @@ ALTER TABLE `issue_receipt_details`
 ALTER TABLE `make_contract`
   ADD PRIMARY KEY (`MCO_ID`),
   ADD KEY `dsccccc` (`RM_ID`),
-  ADD KEY `fgergergerg` (`USER_ID`);
+  ADD KEY `fgergergerg` (`USER_ID`),
+  ADD KEY `sd` (`MONTH_ID`);
 
 --
 -- Indexes for table `month_tbl`
@@ -313,7 +309,7 @@ ALTER TABLE `issue_receipt_details`
 -- AUTO_INCREMENT for table `make_contract`
 --
 ALTER TABLE `make_contract`
-  MODIFY `MCO_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `MCO_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `month_tbl`
@@ -325,7 +321,7 @@ ALTER TABLE `month_tbl`
 -- AUTO_INCREMENT for table `room`
 --
 ALTER TABLE `room`
-  MODIFY `RM_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `RM_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `room_type`
@@ -362,7 +358,8 @@ ALTER TABLE `issue_receipt_details`
 --
 ALTER TABLE `make_contract`
   ADD CONSTRAINT `dsccccc` FOREIGN KEY (`RM_ID`) REFERENCES `room` (`RM_ID`),
-  ADD CONSTRAINT `fgergergerg` FOREIGN KEY (`USER_ID`) REFERENCES `users_info` (`USER_ID`);
+  ADD CONSTRAINT `fgergergerg` FOREIGN KEY (`USER_ID`) REFERENCES `users_info` (`USER_ID`),
+  ADD CONSTRAINT `sd` FOREIGN KEY (`MONTH_ID`) REFERENCES `month_tbl` (`MONTH_ID`);
 
 --
 -- Constraints for table `room`

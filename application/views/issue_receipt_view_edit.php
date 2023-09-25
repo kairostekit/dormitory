@@ -39,7 +39,7 @@
 									<select disabled name="RM_ID" class="form-control" required="required" onchange="getIssue_receiptDataRoomFull(this.value)">
 										<option value="">--เลือก--</option>
 										<?php foreach ($room_all as $key => $item) : ?>
-											<option <?= $Issue_GET->RM_ID == $item->RM_ID ? "selected" : "" ?> value="<?= $item->RM_ID ?>"><?= $item->RM_NAME . "/" . $item->RM_NUMBER  ?></option>
+											<option <?= $Issue_GET->RM_ID == $item->RM_ID ? "selected" : "" ?> value="<?= $item->RM_ID ?>"><?= $item->RM_NAME   ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
@@ -60,13 +60,13 @@
 							<div class="row p-5">
 
 								<div class="col-4">
-									<h6>ชื่อ-นามสกุลผู้เช่า : <span id='user_name'></span></h5>
+									<h6>ชื่อ-นามสกุล : <span id='user_name'></span></h6>
 								</div>
 								<div class="col-4">
-									<h6>รหัสประจำตัวประชาชน : <span id='user_idcard'></span></h5>
+									<h6>รหัสประจำตัวประชาชน : <span id='user_idcard'></span></h6>
 								</div>
 								<div class="col-4">
-									<h6>เบอร์มือถือ : <span id='user_phone'></span></h5>
+									<h6>เบอร์มือถือ : <span id='user_phone'></span></h6>
 								</div>
 
 							</div>
@@ -148,8 +148,8 @@
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
 										<?php
 										if ($Issue_GET->IRC_PAYMENT_OK != 1 && $Issue_GET->IRC_STATUS_CANCEL != 1) : ?>
-											<button class="btn btn-success btn-sm" type="button" onclick=" if(confirm('ยื่นยันการชำระเงิน?')){location.assign('<?= base_url('home/issue_receipt_update_IRC_PAYMENT_OK/' . $Issue_GET->IRC_ID) ?>')};">ชำระเงิน</button>
-											<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการยกเลิก?')){location.assign('<?= base_url('home/issue_receipt_update_delete/' . $Issue_GET->IRC_ID) ?>')};">ยกเลิกบิล</button>
+											<button class="btn btn-success btn-sm" type="button" onclick=" if(confirm('ยืนยันการชำระเงิน?')){location.assign('<?= base_url('home/issue_receipt_update_IRC_PAYMENT_OK/' . $Issue_GET->IRC_ID) ?>')};">ชำระเงิน</button>
+											<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยืนยันการยกเลิก?')){location.assign('<?= base_url('home/issue_receipt_update_delete/' . $Issue_GET->IRC_ID) ?>')};">ยกเลิกบิล</button>
 										<?php endif; ?>
 
 									</div>

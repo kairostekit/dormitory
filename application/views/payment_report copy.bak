@@ -77,7 +77,7 @@
 										<td><?= $ii->USER_NAME ?> </td>
 										<td></td>
 										<td><?= $ii->USER_PHONE ?></td>
-										<td><?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?> </td>
+										<td><?= $ii->RM_NAME  ?> </td>
 										<td><?= $ii->RT_NAME ?> </td>
 										<td><?= $ii->IRC_ROOMRENT ?> </td>
 										<td></td>

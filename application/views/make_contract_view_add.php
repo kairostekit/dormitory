@@ -39,7 +39,7 @@
 							<input type="hidden" name="MCO_MOVEIN" required>
 							<input type="hidden" name="MCO_ROOM_TYPE_NAME" required>
 							<input type="hidden" name="MCO_RM_NAME" required>
-							<input type="hidden" name="MCO_RM_NUMBER" required>
+							<input type="hidden" name="MCO_RM_NUMBER" value=" ">
 							<input type="hidden" name="MCO_ROOMRENT" required>
 							<!-- <input type="hidden" name="RM_MCO_ID" required> -->
 
@@ -101,7 +101,7 @@
 									<select name="RM_ID" class="form-control" required="required" onchange="checkRoom(this.value)">
 										<option value="">--เลือก--</option>
 										<?php foreach ($room_all as $key => $item) : ?>
-											<option value="<?= $item->RM_ID ?>"><?= $item->RM_NAME."/".$item->RM_NUMBER  ?></option>
+											<option value="<?= $item->RM_ID ?>"><?= $item->RM_NAME  ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>

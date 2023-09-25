@@ -116,7 +116,7 @@
 												<?= $ii->USER_PHONE ?>
 											</td>
 											<td>
-												<?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?>
+												<?= $ii->RM_NAME  ?>
 											</td>
 											<td>
 												<?= $ii->RT_NAME ?>

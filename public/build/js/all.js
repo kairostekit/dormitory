@@ -60,7 +60,7 @@ function checkRoom(value) {
 			$("input[name='MCO_MOVEIN']").val(response.RT_MOVEIN);
 			$("input[name='MCO_ROOM_TYPE_NAME']").val(response.RT_NAME);
 			$("input[name='MCO_RM_NAME']").val(response.RM_NAME);
-			$("input[name='MCO_RM_NUMBER']").val(response.RM_NUMBER);
+			// $("input[name='MCO_RM_NUMBER']").val(response.RM_NUMBER);
 			$("input[name='MCO_ROOMRENT']").val(response.RT_ROOMRENT);
 
 

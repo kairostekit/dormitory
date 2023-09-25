@@ -88,7 +88,7 @@
 		}
 
 		.text-bold {
-			font-weight: bold;
+			/* font-weight: bold; */
 		}
 
 		@media screen {

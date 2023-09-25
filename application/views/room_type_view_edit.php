@@ -107,7 +107,7 @@
 								<div class="form-group">
 									<div class="col-md-6 offset-md-3">
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
-										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/room_type_update_delete/' . $RTYPE->RT_ID) ?>')};">ลบข้อมูล</button>
+										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยืนยันการลบ?')){location.assign('<?= base_url('home/room_type_update_delete/' . $RTYPE->RT_ID) ?>')};">ลบข้อมูล</button>
 										<button type="submit" class="btn btn-sm btn-primary">แก้ไขข้อมูล</button>
 									</div>
 								</div>

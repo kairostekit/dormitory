@@ -23,7 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'https://1770-49-237-38-143.ngrok-free.app/dormitory/';
+$config['base_url'] = 'https://3154-49-237-38-133.ngrok-free.app/dormitory/';
+// $config['base_url'] = 'http://localhost/dormitory/';
 
 /*
 |--------------------------------------------------------------------------

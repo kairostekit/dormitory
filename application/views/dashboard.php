@@ -1,6 +1,11 @@
 <meta id="meta-data-x" content='<?= json_encode($จำนวนทำสัญญา) ?>'>
 <meta id="ยอดทั้งหมดบิล" content='<?= json_encode($ยอดทั้งหมดบิล) ?>'>
 
+<?php
+// echo json_encode($จำนวนทำสัญญา);
+// exit
+
+?>
 <div class="right_col" role="">
 	<div class="">
 		<div class="row mb-3">
@@ -75,7 +80,7 @@
 								new Chart(ctx, {
 									type: 'doughnut',
 									data: {
-										labels: ['ชำระแล้ว', 'จำนวนบิลค้างชำระ'],
+										labels: ['ชำระแล้ว', 'ค้างชำระ'],
 										datasets: [{
 											label: 'ยอด',
 											data: [<?= $จำนวนบิลชำระ ?>, <?= $จำนวนบิลค้างชำระ ?>,],
@@ -226,7 +231,12 @@
 									type: 'bar',
 									data: {
 										labels: ["มกราคม", "กุมภาพันธ์", 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-										datasets: meta_data
+										datasets: [{
+											label: 'จำนวน',
+											data: meta_data,
+											borderWidth: 1
+										}]
+
 									},
 									options: {
 										title: {

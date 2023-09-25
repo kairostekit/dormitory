@@ -53,7 +53,7 @@
 										<td><?= sprintf("IRC-%010d", $ii->IRC_ID) ?> </td>
 										<td><?= $ii->USER_NAME ?> </td>
 										<td><?= $ii->USER_PHONE ?> </td>
-										<td><?= $ii->RM_NAME . '/' . $ii->RM_NUMBER ?> </td>
+										<td><?= $ii->RM_NAME  ?> </td>
 										<td><?= $ii->RT_NAME ?> </td>
 										<td><?= $ii->IRC_ROOMRENT ?> </td>
 										<td>
@@ -73,7 +73,7 @@
 												}
 											} else {
 												$url = base_url('home/issue_receipt_update_IRC_PAYMENT_OK/' . $ii->IRC_ID);
-												$msge .= "<a class=\"text-danger\" href='javascript:if(confirm(\"ยื่นยันการจ่าย?\")){location.assign(\"$url\")};' >ยังไม่ชำระ</a>";
+												$msge .= "<a class=\"text-danger\" href='javascript:if(confirm(\"ยืนยันการจ่าย?\")){location.assign(\"$url\")};' >ยังไม่ชำระ</a>";
 											}
 											echo $msge;
 

@@ -39,30 +39,32 @@ class Home extends CI_Controller
 		]);
 
 		$temp = array();
-		foreach ($ข้อมูลห้อง as $key => $item):
+		// foreach ($ข้อมูลห้อง as $key => $item):
 
-			$obj = new stdClass();
-			$obj->label = $item->RM_NAME;
-			$ข้อมูลเดือน = $month_tbl_models->QueryResources([]);
-			$tdaamp = array();
-			foreach ($ข้อมูลเดือน as $mk => $mi):
-				$counst_M = count($Make_contract_models->QueryResources([
-					"WHERE" => [
-						$Make_contract_models->TB_NAME() => [
-							"MONTH_ID" => $mi->MONTH_ID,
-						]
+		$obj = new stdClass();
+		// $obj->label = $item->RM_NAME;
+		$ข้อมูลเดือน = $month_tbl_models->QueryResources([]);
+		$tdaamp = array();
+		foreach ($ข้อมูลเดือน as $mk => $mi):
+			$counst_M = count($Make_contract_models->QueryResources([
+				"WHERE" => [
+					$Make_contract_models->TB_NAME() => [
+						"MONTH_ID" => $mi->MONTH_ID,
+						// "RM_ID" => $item->RM_ID,
 					]
-				]));
-				array_push($tdaamp, $counst_M);
-			endforeach;
-
-			$obj->data = $tdaamp;
-			array_push($temp, $obj);
+				]
+			]));
+			array_push($tdaamp, $counst_M);
 		endforeach;
 
+		// 	$obj->data = $tdaamp;
+		// 	array_push($temp, $obj);
+		// endforeach;
 
-		$จำนวนทำสัญญา = $temp;
 
+		$จำนวนทำสัญญา = $tdaamp;
+		// echo json_encode($tdaamp);
+		// return;
 
 
 
@@ -198,12 +200,6 @@ class Home extends CI_Controller
 			"จำนวนทำสัญญา" => $จำนวนทำสัญญา,
 			"ยอดทั้งหมดบิล" => $ยอดทั้งหมดบิล
 		];
-
-
-
-
-
-
 
 		$Load->template("dashboard", $data);
 	}
@@ -432,6 +428,10 @@ class Home extends CI_Controller
 	public function admin_view_edit($ACC_ID)
 	{
 		$RES = new Account_models();
+		$chck = false;
+		if ($ACC_ID == '1') {
+			$chck = true;
+		}
 		$data['ACC'] = $RES->QueryResources([
 			"WHERE" => [
 				"account" => [
@@ -441,6 +441,9 @@ class Home extends CI_Controller
 			"TYPE_RESULT" => "object",
 			"ONE_ROW" => TRUE,
 		]);
+
+		$data['check_a'] = $chck;
+
 		$Load = new MY_Loader();
 		$Load->template("admin_view_edit", $data);
 	}
@@ -660,7 +663,7 @@ class Home extends CI_Controller
 
 		$RM_NAME = $_POST["RM_NAME"];
 		$RT_ID = $_POST["RT_ID"];
-		$RM_NUMBER = $_POST["RM_NUMBER"];
+		// $RM_NUMBER = $_POST["RM_NUMBER"];
 
 		$Room = new Room_models();
 		$RES_D = $Room->QueryResources([
@@ -683,7 +686,7 @@ class Home extends CI_Controller
 			$Room->InsertResources([
 				"RM_NAME" => $RM_NAME,
 				"RT_ID" => $RT_ID,
-				"RM_NUMBER" => $RM_NUMBER,
+				// "RM_NUMBER" => $RM_NUMBER,
 			])
 		) {
 			$url = base_url('home/room');
@@ -696,7 +699,7 @@ class Home extends CI_Controller
 	{
 		$RM_NAME = $_POST["RM_NAME"];
 		$RT_ID = $_POST["RT_ID"];
-		$RM_NUMBER = $_POST["RM_NUMBER"];
+		// $RM_NUMBER = $_POST["RM_NUMBER"];
 
 		$Room = new Room_models();
 		$RES_D = $Room->QueryResources([
@@ -785,8 +788,10 @@ class Home extends CI_Controller
 
 		$USER_ID = $DATA->USER_ID;
 		$RM_MCO_ID = $DATA->RM_MCO_ID;
+
+
 		$USER = new Users_info_models();
-		$USER->UpdateResources([
+		$uc = $USER->UpdateResources([
 			"WHERE" => [
 				"USER_ID" => $USER_ID
 			],
@@ -794,6 +799,8 @@ class Home extends CI_Controller
 				"USER_RM_ID" => NULL,
 			],
 		]);
+
+
 
 		$MCO = new Make_contract_models();
 		$MCO->UpdateResources([
@@ -803,8 +810,10 @@ class Home extends CI_Controller
 			"DATA" => [
 				"MCO_STATUS_SUCCESS" => 1,
 				"MCO_STATUS_MOVE" => 1,
+				// "MCO_STATUS" => 0,
 			],
 		]);
+
 
 		$check = $Room->UpdateResources([
 			"WHERE" => [
@@ -814,7 +823,8 @@ class Home extends CI_Controller
 				"RM_STATUS" => 1,
 				"USER_ID" => NULL,
 				"RM_MOVEINDATE" => NULL,
-				"RM_USE" => 1
+				"RM_USE" => 1,
+				"RM_MCO_ID" => NULL,
 			],
 		]);
 
@@ -1754,7 +1764,6 @@ class Home extends CI_Controller
 			"WHERE" => [
 				"room" => [
 					"RM_STATUS" => 1,
-					"RM_USE" => '1'
 
 				]
 			],
@@ -1906,16 +1915,78 @@ class Home extends CI_Controller
 	public function make_contract_update_delete($MCO_ID)
 	{
 		$Make_contract = new Make_contract_models();
-		$check = $Make_contract->UpdateResources([
+
+		$Room = new Room_models();
+
+		$DATAC = $Make_contract->QueryResources([
 			"WHERE" => [
-				
+				$Make_contract::TB_NAME() => [
+					"MCO_ID" => $MCO_ID
+				]
+			],
+			"ONE_ROW" => TRUE,
+		]);
+
+
+		$RM_ID = $DATAC->RM_ID;
+
+
+		$DATA = $Room->QueryResources([
+			"WHERE" => [
+				$Room::TB_NAME() => [
+					"RM_ID" => $RM_ID
+				]
+			],
+			"ONE_ROW" => TRUE,
+		]);
+
+
+		$USER_ID = $DATA->USER_ID;
+		$RM_MCO_ID = $DATA->RM_MCO_ID;
+
+
+		$USER = new Users_info_models();
+		$uc = $USER->UpdateResources([
+			"WHERE" => [
+				"USER_ID" => $USER_ID
+			],
+			"DATA" => [
+				"USER_RM_ID" => NULL,
+			],
+		]);
+
+
+
+		$MCO = new Make_contract_models();
+		$MCO->UpdateResources([
+			"WHERE" => [
 				"MCO_ID" => $MCO_ID
 			],
 			"DATA" => [
-				// "RT_STATUS" => 0,
+				// "MCO_STATUS_SUCCESS" => 1,
+				// "MCO_STATUS_MOVE" => 1,
+				// "MCO_STATUS" => 0,
 				"MCO_STATUS_CANCEL" => 1,
+
 			],
 		]);
+
+
+		$check = $Room->UpdateResources([
+			"WHERE" => [
+				"RM_ID" => $RM_ID
+			],
+			"DATA" => [
+				"RM_STATUS" => 1,
+				"USER_ID" => NULL,
+				"RM_MOVEINDATE" => NULL,
+				"RM_USE" => 1,
+				"RM_MCO_ID" => NULL,
+			],
+		]);
+
+
+
 
 		if ($check) {
 			$url = base_url('home/make_contract');

@@ -1,3 +1,5 @@
+
+
 <div class="right_col" role="main">
 	<div class="">
 		<div class="page-title">
@@ -97,7 +99,7 @@
 									<select disabled id="RM_ID" name="RM_ID" class="form-control" required="required" onchange="checkRoom(this.value)">
 										<option value="">--เลือก--</option>
 										<?php foreach ($room_all as $key => $item) : ?>
-											<option <?= $MCO->RM_ID == $item->RM_ID ? "selected" : ""  ?> value="<?= $item->RM_ID ?>"><?= $item->RM_NAME.'/'.$item->RM_NUMBER ?></option>
+											<option <?= $MCO->RM_ID == $item->RM_ID ? "selected" : ""  ?> value="<?= $item->RM_ID ?>"><?= $item->RM_NAME ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
@@ -182,8 +184,8 @@
 								<div class="form-group">
 									<div class="col-md-6 offset-md-3">
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
-										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/make_contract_update_delete/' . $MCO->MCO_ID) ?>')};">ยกเลิกสัญญา</button>
-										<button style="display: <?= $MCO->MCO_STATUS_SUCCESS == 0 ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยื่นยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $MCO->RM_ID) ?>')};">ย้ายออก</button>
+										<button style="display: <?= $MCO->MCO_MOVEIN_PAY == 1 ? "none" : "block" ?>;" class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยืนยันการลบ?')){location.assign('<?= base_url('home/make_contract_update_delete/' . $MCO->MCO_ID) ?>')};">ยกเลิกสัญญา</button>
+										<button style="display: <?= $MCO->MCO_MOVEIN_PAY == 1 ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยืนยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $MCO->RM_ID) ?>')};">ย้ายออก</button>
 										<button type="submit" class="btn btn-sm btn-primary">แก้ไข</button>
 									</div>
 								</div>

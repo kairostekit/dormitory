@@ -32,15 +32,15 @@
 						<form class="" action="<?= base_url('home/room_update_edit/'.$room->RM_ID) ?>" method="post" novalidate="">
 
 							<div class="field item form-group">
-								<label class="col-form-label col-md-3 col-sm-3  label-align">ชื่อห้อง<span class="required">*</span></label>
+								<label class="col-form-label col-md-3 col-sm-3  label-align">เลขห้อง<span class="required">*</span></label>
 								<div class="col-md-6 col-sm-6">
 									<input type="text" class="form-control" data-validate-minmax="1,99999999" name="RM_NAME" required="required" value="<?= $room->RM_NAME ?>" >
 								</div>
 							</div>
-							<div class="field item form-group">
+							<div style=" display: none; "  class="field item form-group">
 								<label class="col-form-label col-md-3 col-sm-3  label-align">เลขห้อง<span class="required">*</span></label>
 								<div class="col-md-6 col-sm-6">
-									<input type="text" class="form-control" data-validate-minmax="1,99999999" name="RM_NUMBER" required="required" value="<?= $room->RM_NUMBER ?>">
+									<input disabled type="text" class="form-control" data-validate-minmax="1,99999999" name="RM_NUMBER" value=""">
 								</div>
 							</div>
 
@@ -116,9 +116,9 @@
 								<div class="form-group">
 									<div class="col-md-6 offset-md-3">
 										<button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
-										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/room_update_delete/' . $room->RM_ID) ?>')};">ลบข้อมูล</button>
-										<button style="display: <?=( $room->RM_MCO_ID != NULL && $room->RM_USE != "S") ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยื่นยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $room->RM_ID) ?>')};">ย้ายออก</button>
-										<button style="display: <?=( $room->RM_MCO_ID != NULL && $room->RM_USE == "S") ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยื่นยันการย้ายเข้า?')){location.assign('<?= base_url('home/room_update_moveIN/' . $room->RM_ID) ?>')};">เข้าอยู่</button>
+										<button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยืนยันการลบ?')){location.assign('<?= base_url('home/room_update_delete/' . $room->RM_ID) ?>')};">ลบข้อมูล</button>
+										<button style="display: <?=( $room->RM_MCO_ID != NULL && $room->RM_USE != "S") ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยืนยันการย้ายออก?')){location.assign('<?= base_url('home/room_update_move/' . $room->RM_ID) ?>')};">ย้ายออก</button>
+										<button style="display: <?=( $room->RM_MCO_ID != NULL && $room->RM_USE == "S") ? "block" : "none" ?>;" class="btn btn-warning btn-sm" type="button" onclick=" if(confirm('ยืนยันการย้ายเข้า?')){location.assign('<?= base_url('home/room_update_moveIN/' . $room->RM_ID) ?>')};">เข้าอยู่</button>
 										<button type="submit" class="btn btn-sm btn-primary">แก้ไขข้อมูล</button>
 									</div>
 								</div>

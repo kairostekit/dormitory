@@ -30,7 +30,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">ชื่อ - สกุล</th>
                                 <th scope="col">USERNAME</th>
-                                <th scope="col">PASSWORD</th>
+                                <!-- <th scope="col">PASSWORD</th> -->
                                 <th scope="col"><a class="btn btn-sm btn-outline-success" href="<?= base_url('home/admin_view_add') ?>">เพิ่ม</a></th>
                             </tr>
                         </thead>
@@ -40,8 +40,8 @@
                                     <th scope="row"><?= $key +1; ?></th>
                                     <td><?= $ii->ACC_NAME; ?></td>
                                     <td><?= $ii->ACC_USERNAME; ?></td>
-                                    <td><?= $ii->ACC_PASSWORD; ?></td>
-                                    <td><a style="display: <?= $ii->ACC_ID  == 1 ? "none":"block" ?> ;" class="btn btn-sm btn-warning" href="<?= base_url('home/admin_view_edit/' . $ii->ACC_ID) ?>">แก้ไข</a></td>
+                                    <!-- <td><?= $ii->ACC_PASSWORD; ?></td> -->
+                                    <td><a  class="btn btn-sm btn-warning" href="<?= base_url('home/admin_view_edit/' . $ii->ACC_ID) ?>">แก้ไข</a></td>
                                 </tr>
                             <?php endforeach; ?>
 

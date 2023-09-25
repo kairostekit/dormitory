@@ -39,7 +39,7 @@
 									<select name="RM_ID" class="form-control" required="required" onchange="getIssue_receiptDataRoomFull(this.value)">
 										<option  value="">--เลือก--</option>
 										<?php foreach ($room_all as $key => $item) : ?>
-											<option <?= $RM_ID == $item->RM_ID ? "selected" :"" ?>  value="<?= $item->RM_ID ?>"><?= $item->RM_NAME . "/" . $item->RM_NUMBER  ?></option>
+											<option <?= $RM_ID == $item->RM_ID ? "selected" :"" ?>  value="<?= $item->RM_ID ?>"><?= $item->RM_NAME ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
@@ -59,14 +59,14 @@
 
 							<div class="row p-5">
 
-								<div class="col-4">
-									<h6>ชื่อ-นามสกุลผู้เช่า : <span id='user_name'></span></h5>
+								<div class="col-3">
+									<h6>ชื่อ-นามสกุล : <span id='user_name'></span></h6>
 								</div>
-								<div class="col-4">
-									<h6>รหัสประจำตัวประชาชน : <span id='user_idcard'></span></h5>
+								<div class="col-6">
+									<h6>รหัสประจำตัวประชาชน : <span id='user_idcard'></span></h6>
 								</div>
-								<div class="col-4">
-									<h6>เบอร์มือถือ : <span id='user_phone'></span></h5>
+								<div class="col-3">
+									<h6 class=" text-end " >เบอร์มือถือ : <span id='user_phone'></span></h6>
 								</div>
 
 							</div>

@@ -32,15 +32,15 @@
 						<form class="" action="<?= base_url('home/room_insert_add') ?>" method="post" novalidate="">
 
 							<div class="field item form-group">
-								<label class="col-form-label col-md-3 col-sm-3  label-align">ชื่อห้อง<span class="required">*</span></label>
+								<label class="col-form-label col-md-3 col-sm-3  label-align">เลขห้อง<span class="required">*</span></label>
 								<div class="col-md-6 col-sm-6">
 									<input type="text" class="form-control" data-validate-minmax="1,99999999" name="RM_NAME" required="required">
 								</div>
 							</div>
-							<div class="field item form-group">
+							<div style=" display: none; " class="field item form-group">
 								<label class="col-form-label col-md-3 col-sm-3  label-align">เลขห้อง<span class="required">*</span></label>
 								<div class="col-md-6 col-sm-6">
-									<input type="text" class="form-control" data-validate-minmax="1,99999999" name="RM_NUMBER" required="required">
+									<input disabled type="text" class="form-control"  name="RM_NUMBER" value=" " >
 								</div>
 							</div>
 

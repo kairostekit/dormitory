@@ -47,7 +47,7 @@
                             <div class="item form-group">
                                 <div class="col-md-6 col-sm-6 offset-md-3">
                                     <button class="btn btn-dark btn-sm" type="button" onclick="history.back(-1)">ย้อนกลับ</button>
-                                    <button class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยื่นยันการลบ?')){location.assign('<?= base_url('home/admin_update_delete/' . $ACC->ACC_ID) ?>')};">ลบข้อมูล</button>
+                                    <button style=" display:  <?=  $check_a == 'true' ? "none" : "block" ?>; "  class="btn btn-danger btn-sm" type="button" onclick=" if(confirm('ยืนยันการลบ?')){location.assign('<?= base_url('home/admin_update_delete/' . $ACC->ACC_ID) ?>')};">ลบข้อมูล</button>
                                     <button type="submit" class="btn btn-success btn-sm">บันทึกแก้ไข</button>
                                 </div>
                             </div>
