@@ -37,7 +37,6 @@ class Auth extends CI_Controller
 
         $data = [
             "ACC_USERNAME" => $ACC_USERNAME,
-            "ACC_USERNAME" => $ACC_USERNAME,
         ];
 
         $ACC = new Account_models();
