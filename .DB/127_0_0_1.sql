@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2023 at 01:52 PM
+-- Generation Time: Sep 26, 2023 at 01:54 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `dormitory`
 --
+CREATE DATABASE IF NOT EXISTS `dormitory` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `dormitory`;
 
 -- --------------------------------------------------------
 
