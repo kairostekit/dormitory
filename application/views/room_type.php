@@ -36,7 +36,7 @@
 									<th>ค่าน้ำ-ไฟ / unit</th>
 									<th>ขนาดห้อง/ตร.ม</th>
 									<th>ขนาดห้อง กxย</th>
-									<th>เงือนไขการคืนเงิน</th>
+									<th>เงื่อนไขไขการคืนเงิน</th>
 									<th>รายละเอียด</th>
 									<th><a class="btn btn-sm btn-outline-success" href="<?= base_url('home/room_type_view_add') ?>">เพิ่ม</a></th>
 								</tr>

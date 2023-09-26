@@ -167,7 +167,7 @@
 								</div>
 							</div>
 							<div class="field item form-group">
-								<label class="col-form-label col-md-3 col-sm-3  label-align">เงือนไขคืนเงินประกัน</label>
+								<label class="col-form-label col-md-3 col-sm-3  label-align">เงื่อนไขไขคืนเงินประกัน</label>
 								<div class="col-md-6 col-sm-6">
 									<textarea disabled name="RT_CONDITIONS" class="form-control"   rows="2"></textarea>
 

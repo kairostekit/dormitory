@@ -113,10 +113,10 @@
 												<input disabled value="<?= $ii->IRD_PERVIOUS ?>" value="0" min="0" class="form-control " type="number" name="IRD_PERVIOUS[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required">
 											</td>
 											<td>
-												<input disabled value="<?= $ii->IRD_PERVIOUS ?>" value="0" min="0" class="form-control" type="number" name="IRD_THISNUM[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required">
+												<input disabled value="<?= $ii->IRD_THISNUM ?>" value="0" min="0" class="form-control" type="number" name="IRD_THISNUM[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required">
 											</td>
 											<td>
-												<input disabled value="<?= $ii->IRD_PERVIOUS ?>" value="0" min="0" class="form-control" type="number" name="IRD_UNITSUSED[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required" readonly>
+												<input disabled value="<?= $ii->IRD_UNITSUSED ?>" value="0" min="0" class="form-control" type="number" name="IRD_UNITSUSED[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required" readonly>
 											</td>
 											<td>
 												<input disabled value="<?= $ii->IRD_PERUNITS ?>" value="0" min="0" class="form-control" type="number" name="IRD_PERUNITS[]" data-validate-minmax="1,99999999" data-validate-linked="number" required="required" readonly>
