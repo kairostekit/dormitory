@@ -137,32 +137,43 @@
 
 
 	<div class="page">
-		<h2 class="text-center">บิลค่าห้องพัก</h2>
-		<h2 class="text-center">รอบบิลของเดือน <?= $Issue_GET->MONTH_NAME ?> ปี <?= $Issue_GET->IRC_YEAR + 543 ?> </h2>
+		<h2 class="text-center">ใบแจ้งหนี้/ใบเสร็จรับเงิน</h2>
+		<h2 class="text-center">รอบบิลของเดือน
+			<?= $Issue_GET->MONTH_NAME ?> ปี
+			<?= $Issue_GET->IRC_YEAR + 543 ?>
+		</h2>
 		<table style="width: 100%;margin-bottom: 10px;">
 			<thead>
 				<tr>
 					<th style="width: 50%;">
 					</th>
 					<td class="text-left">
-						<p class=""><?= DORMITORY_NAME ?> <?= DORMITORY_ADDESS ?></p>
-						<p class="text-bold">ออกเมื่อ<?= DateThaiFull(date("Y-m-d")) ?></p>
+						<p class="">
+							<?= DORMITORY_NAME ?>
+							<?= DORMITORY_ADDESS ?>
+						</p>
+						<p class="text-bold">ออกเมื่อ
+							<?= DateThaiFull(date("Y-m-d")) ?>
+						</p>
 					</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td colspan="100" class="text-left">
-						<p class="text-bold">เรียนคุณ <?=  $Issue_GET->USER_NAME ?></p>
-						<p class="text-bold">ห้อง <?=  $Issue_GET->RM_NAME ?> ประเภทห้อง <?= $Issue_GET->RT_NAME ?> </p>
+						<!-- <p class="text-bold">เรียนคุณ <?= $Issue_GET->USER_NAME ?></p> -->
+						<p class="text-bold">ห้อง
+							<?= $Issue_GET->RM_NAME ?> ประเภทห้อง
+							<?= $Issue_GET->RT_NAME ?>
+						</p>
 					</td>
 
 				</tr>
-				<tr>
+				<!-- <tr>
 					<td colspan="100">
-						<h2 style="margin: 0;" class="text-bold">ยอดจ่ายทั้งหมด : <?= $Issue_GET->IRC_TOTAL  ?> (<?= ConvertNume($Issue_GET->IRC_TOTAL)   ?>) </h2>
+						<h2 style="margin: 0;" class="text-bold">ยอดจ่ายทั้งหมด : <?= $Issue_GET->IRC_TOTAL ?> (<?= ConvertNume($Issue_GET->IRC_TOTAL) ?>) </h2>
 					</td>
-				</tr>
+				</tr> -->
 			</tbody>
 		</table>
 
@@ -195,9 +206,11 @@
 
 			<tbody>
 
-				<?php foreach ($receipt_details as $ik => $ii) : ?>
+				<?php foreach ($receipt_details as $ik => $ii): ?>
 					<tr>
-						<th><?= $ik + 2 ?></th>
+						<th>
+							<?= $ik + 2 ?>
+						</th>
 						<td>
 							<?= $ii->IRD_LISTNAME ?>
 						</td>
@@ -224,13 +237,32 @@
 			<tfoot>
 				<tr>
 					<th class="text-right" colspan="7">
-						<h3>ยอดรวม <?= $Issue_GET->IRC_TOTAL  ?>(<?= ConvertNume($Issue_GET->IRC_TOTAL)   ?>)</h5>
+						<h2 style="margin: 0;" class="text-bold">ยอดจ่ายทั้งหมด :
+							<?= $Issue_GET->IRC_TOTAL ?> (
+							<?= ConvertNume($Issue_GET->IRC_TOTAL) ?>)
+						</h2>
+
+						<!-- <h3>ยอดรวม
+							<?= $Issue_GET->IRC_TOTAL ?>(
+							<?= ConvertNume($Issue_GET->IRC_TOTAL) ?>)</h5> -->
 					</th>
 				</tr>
 			</tfoot>
 
 		</table>
+		<table style="width: 100%;margin-bottom: 10px;">
 
+			<tbody>
+				<tr>
+					<td colspan="100" class="text-left">
+						<p class="text-bold">
+							กำหนดชำระภายในวันที่ 1-5 ของทุกเดือน(เงินสด) /// ชำระเกินวันที่กำหนด ปรับวันละ 100 บาท ///
+						</p>
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
 
 	</div>
 
@@ -240,19 +272,19 @@
 <script>
 	window.print();
 
-	(function() {
+	(function () {
 
-		var beforePrint = function() {
+		var beforePrint = function () {
 
 		};
 
-		var afterPrint = function() {
-			window.close();
+		var afterPrint = function () {
+			// window.close();
 		};
 
 		if (window.matchMedia) {
 			var mediaQueryList = window.matchMedia('print');
-			mediaQueryList.addListener(function(mql) {
+			mediaQueryList.addListener(function (mql) {
 				if (mql.matches) {
 					beforePrint();
 				} else {
