@@ -237,10 +237,10 @@
 			<tfoot>
 				<tr>
 					<th class="text-right" colspan="7">
-						<h2 style="margin: 0;" class="text-bold">ยอดจ่ายทั้งหมด :
+						<h3 style="margin: 0;" class="text-bold">ยอดจ่ายทั้งหมด :
 							<?= $Issue_GET->IRC_TOTAL ?> (
 							<?= ConvertNume($Issue_GET->IRC_TOTAL) ?>)
-						</h2>
+						</h3>
 
 						<!-- <h3>ยอดรวม
 							<?= $Issue_GET->IRC_TOTAL ?>(
