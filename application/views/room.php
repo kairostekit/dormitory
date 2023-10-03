@@ -50,7 +50,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<?php foreach ($room_all as $key => $ii) : ?>`
+								<?php foreach ($room_all as $key => $ii) : ?>
 								<tr>
 									<th scope="row"><?= $key + 1 ?></th>
 									<td><?= $ii->RM_NAME ?> </td>
