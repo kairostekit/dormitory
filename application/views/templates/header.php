@@ -67,7 +67,7 @@
 			new DataTable('table', {
 				// dom: 'Blfrtip',
 				"lengthMenu": [
-					[100, -1, 50, 25], [100, "All", 50, 25]
+					[25,50 , 100, -1], [25, 50, 100, "All"]
 				],
 				"language": {
 					"sProcessing": " กำลังดำเนินการ... ",
